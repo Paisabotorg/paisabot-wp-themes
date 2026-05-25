@@ -1,0 +1,17 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Secrets — never commit these
+.env
+*.env
+.wp-credentials
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
