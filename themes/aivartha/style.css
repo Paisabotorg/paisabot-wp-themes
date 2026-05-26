@@ -939,7 +939,7 @@ figure { margin: 0; }
 }
 
 /* Site body base spacing */
-.site-body { padding: 32px 0 64px; }
+.site-body { padding: 0 0 64px; }
 html { scroll-padding-top: calc(var(--header-h) + 12px); }
 
 .art-head { padding: 24px 0 0; }
@@ -1015,7 +1015,7 @@ html { scroll-padding-top: calc(var(--header-h) + 12px); }
 .share-bookmark:hover { background: var(--amber-soft); color: var(--amber-3); }
 
 .art-hero-img {
-  margin: 0 0 24px;
+  margin: 0 0 0;
   border-radius: var(--r); overflow: hidden;
   aspect-ratio: 16/8;
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%);
@@ -1031,7 +1031,7 @@ html { scroll-padding-top: calc(var(--header-h) + 12px); }
 /* Article layout */
 .art-layout {
   display: grid; grid-template-columns: 1fr 300px;
-  gap: 48px; align-items: start; margin-top: 32px;
+  gap: 48px; align-items: start; margin-top: 24px;
 }
 .art-body { min-width: 0; max-width: 740px; margin: 0 auto; width: 100%; }
 
