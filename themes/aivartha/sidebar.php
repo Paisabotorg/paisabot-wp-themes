@@ -6,20 +6,6 @@
 
     <!-- Default sidebar widgets when none are configured -->
 
-    <!-- About -->
-    <section class="widget widget-about">
-      <div class="widget-hd">About AI Vartha</div>
-      <div class="widget-body">
-        <p><?php echo esc_html(get_bloginfo('description') ?: 'Trusted economic and financial news powered by AI — delivered in your language.'); ?></p>
-        <div class="sidebar-socials">
-          <a href="#" aria-label="Facebook"><?php echo aiv_icon('i-fb'); ?></a>
-          <a href="#" aria-label="Twitter"><?php echo aiv_icon('i-tw'); ?></a>
-          <a href="#" aria-label="WhatsApp"><?php echo aiv_icon('i-wa'); ?></a>
-          <a href="<?php bloginfo('rss2_url'); ?>" aria-label="RSS"><?php echo aiv_icon('i-rss'); ?></a>
-        </div>
-      </div>
-    </section>
-
     <!-- Trending / Most Recent -->
     <section class="widget widget-trending">
       <div class="widget-hd"><?php echo aiv_icon('i-trend-up'); ?> Trending Now</div>
