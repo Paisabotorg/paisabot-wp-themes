@@ -1,0 +1,15 @@
+<svg viewBox="0 0 280 64" xmlns="http://www.w3.org/2000/svg" width="280" height="64">
+  <defs>
+    <linearGradient id="pb-pill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1B2E45"></stop>
+      <stop offset="100%" stop-color="#0F1E33"></stop>
+    </linearGradient>
+  </defs>
+  
+  <rect x="0" y="10" width="124" height="40" rx="10" fill="url(#pb-pill)"></rect>
+  <text x="62" y="40" text-anchor="middle" font-family="Inter, system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="24" font-weight="900" fill="#FFFFFF" letter-spacing="-0.7">Paisa</text>
+  
+  <text x="132" y="40" font-family="Georgia, &#39;Source Serif 4&#39;, serif" font-size="26" font-style="italic" font-weight="700" fill="#C4820A">Bot</text>
+  
+  <text x="2" y="60" font-family="Inter, system-ui, sans-serif" font-size="9" font-weight="700" letter-spacing="1.8" fill="#7A93A3">ECONOMIC  INTELLIGENCE</text>
+</svg>

@@ -1,7 +1,15 @@
 /*
-Theme Name: AI Vartha Editorial
-Version: 3.3.0
-Description: v3.2.0 — article header fix, icon-only share buttons, no comments
+Theme Name: PaisaBot Editorial
+Theme URI: https://paisabot.com
+Author: PaisaBot Editorial
+Description: PaisaBot v4.0.0 — broadsheet editorial theme for paisabot.com. New paisa-coin logo lockup, full-bleed sponsor leaderboards above Briefing and around Voices, mobile-first responsive across 480/768/1024/1280 breakpoints, refined ad-zone widget areas. Tuned for English (latin) and Indic editions via the arthanama sibling.
+Version: 4.0.0
+Requires at least: 6.0
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: paisabot
+Tags: news, fintech, responsive, broadsheet, editorial, mobile-first
 */
 
 /* ──────────────────────────────────────────────────────────────────────
@@ -404,10 +412,18 @@ figure { margin: 0; }
 .logo-mark { width: 38px; height: 38px; }
 .logo-text { display: flex; flex-direction: column; line-height: 1; }
 .logo-name {
-  font-size: 22px; font-weight: 900;
-  color: var(--navy); letter-spacing: -.04em;
+  display: inline-flex; align-items: baseline; gap: 4px;
+  font-size: 22px; font-weight: 900; letter-spacing: -.04em; line-height: 1;
 }
-.logo-name em { color: var(--amber); font-style: normal; }
+.logo-name .paisa-pill {
+  background: linear-gradient(135deg, var(--navy-2), var(--navy));
+  color: #fff;
+  padding: 5px 9px 6px;
+  border-radius: 7px;
+  font-family: var(--font-sans);
+  letter-spacing: -.03em;
+}
+.logo-name em { color: var(--amber); font-style: italic; font-family: var(--font-serif); font-weight: 700; }
 .logo-sub {
   font-size: 9.5px; color: var(--fg-muted);
   letter-spacing: .14em; text-transform: uppercase;
@@ -3577,4 +3593,258 @@ body.category-markets .site-body {
 @media (max-width: 480px) {
   .mktd-cards-grid { grid-template-columns: 1fr; }
   .mktd-idx-value  { font-size: 1.375rem; }
+}
+
+
+/* ──────────────────────────────────────────────────────────────────────
+   ▸ PaisaBot v4 — Full-width sponsor leaderboard ad (between sections)
+   ──────────────────────────────────────────────────────────────────── */
+.leaderboard-ad {
+  margin: 0 calc(50% - 50vw) 40px;
+  position: relative;
+}
+.leaderboard-ad .lb-rule {
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    var(--border-strong) 0,
+    var(--border-strong) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+.leaderboard-ad .lb-inner {
+  background: linear-gradient(180deg, var(--cream-2), var(--cream-3));
+  padding: 28px 0; position: relative;
+}
+.leaderboard-ad .ad-tag {
+  position: absolute; top: 10px; right: 5%;
+  font-size: 9px; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.lb-content {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 40px; align-items: center;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.lb-content-widget { display: block; }
+.lb-sponsor {
+  display: inline-block;
+  font-family: var(--font-serif); font-style: italic;
+  font-size: 14px; color: var(--amber-3); font-weight: 600;
+  margin-bottom: 4px;
+}
+.lb-headline {
+  font-family: var(--font-serif); font-weight: 700;
+  font-size: 26px; line-height: 1.22;
+  color: var(--navy); letter-spacing: -.015em;
+  margin-bottom: 6px;
+}
+.lb-body { font-size: 14px; color: var(--fg-3); line-height: 1.55; max-width: 680px; margin: 0; }
+.lb-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--navy); color: #fff;
+  padding: 14px 26px; border-radius: var(--r-sm);
+  font-size: 13px; font-weight: 800;
+  letter-spacing: .04em; text-transform: uppercase;
+  white-space: nowrap; min-height: 44px;
+  transition: background var(--t-fast), gap var(--t-fast);
+  text-decoration: none;
+}
+.lb-cta:hover { background: var(--amber-3); color: #fff; gap: 12px; }
+.lb-cta svg { width: 13px; height: 13px; }
+.leaderboard-ad.lb-sponsor .lb-inner {
+  background: linear-gradient(180deg, #FFFCF9, var(--cream-2));
+}
+
+/* Footer logo lockup with new coin mark */
+.footer-logo-lockup { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.footer-logo-name {
+  display: inline-flex; align-items: baseline; gap: 4px;
+  font-size: 26px; font-weight: 900;
+  color: #fff; letter-spacing: -.04em;
+}
+.footer-logo-name .paisa-pill {
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  padding: 5px 11px 6px;
+  border-radius: 7px;
+  font-family: var(--font-sans);
+  letter-spacing: -.03em;
+}
+.footer-logo-name em { color: var(--amber-2); font-style: italic; font-family: var(--font-serif); font-weight: 700; }
+
+/* Mobile nav drawer (drives hamburger reveal) */
+.mobile-nav {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(15,30,51,.6);
+  display: flex; justify-content: flex-end;
+}
+.mobile-nav-panel {
+  width: min(320px, 88vw);
+  background: var(--surface);
+  padding: 20px;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.mobile-nav-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.mobile-nav-list a {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 6px; font-size: 15px; font-weight: 600;
+  color: var(--fg-2); border-bottom: 1px solid var(--border-2);
+  min-height: 48px;
+}
+.mobile-nav-list a:hover { color: var(--amber-3); background: var(--cream-2); }
+.mobile-nav-list a.is-active { color: var(--navy); font-weight: 700; }
+
+/* ──────────────────────────────────────────────────────────────────────
+   ▸ PaisaBot v4 — RESPONSIVE (mobile-first; 480/768/1024/1280 breakpoints)
+   ──────────────────────────────────────────────────────────────────── */
+
+@media (pointer: coarse) {
+  .nav-list a, .icon-btn, .btn-subscribe, .btn-analyse,
+  .lang-pill, .share-btn, .lb-cta, .nl-btn, .pulse-tabs button,
+  .footer-links a, .sec-more, .topbar-social a, .footer-socials a {
+    min-height: 44px;
+  }
+  .lang-pill { min-width: 44px; padding: 10px 12px; }
+}
+
+@media (max-width: 1280px) {
+  .header-inner { gap: 18px; }
+  .nav-list a { padding: 8px 7px; font-size: 12.5px; }
+  .front-page-grid { grid-template-columns: 1.6fr 1fr 1fr; }
+}
+
+@media (max-width: 1024px) {
+  .header-inner { gap: 14px; }
+  .primary-nav { overflow-x: auto; }
+  .nav-list { flex-wrap: nowrap; }
+  .nav-list a { padding: 8px 8px; font-size: 12px; }
+  .logo-name { font-size: 19px; }
+  .logo-sub { font-size: 9px; }
+  .front-page-grid { grid-template-columns: 1fr 1fr; }
+  .front-page-grid > .fp-lead { grid-column: 1 / -1; }
+  .front-page-grid > *:not(:last-child) { border-right: 0; }
+  .front-page-grid > * { border-bottom: 1px solid var(--border); }
+  .pulse-body { grid-template-columns: 1fr; gap: 24px; }
+  .pulse-stock-grid { grid-template-columns: repeat(2, 1fr); }
+  .voices-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .newsletter-band .wrap { grid-template-columns: 1fr; gap: 32px; padding-top: 40px; padding-bottom: 40px; }
+  .footer-cols { grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+  .footer-logo-block { grid-column: 1 / -1; max-width: none; }
+  .dateline-indices { display: none; }
+}
+
+@media (max-width: 768px) {
+  .wrap, .wrap-wide { padding-inline: 18px; }
+  :root {
+    --header-h: 58px;
+    --topbar-h: 34px;
+    --ticker-h: 32px;
+    --breaking-h: 36px;
+  }
+
+  .topbar { font-size: 10.5px; }
+  .topbar-date { display: none; }
+  .topbar-edition { border-left: 0; padding-left: 0; font-size: 9.5px; }
+  .topbar-social { gap: 12px; }
+
+  .primary-nav { display: none; }
+  .hamburger { display: inline-flex !important; }
+  .btn-subscribe { padding: 0 12px; font-size: 11.5px; }
+  .btn-subscribe svg { display: none; }
+  .logo-text { display: none; }
+
+  .breaking-pill { padding: 0 12px; font-size: 9.5px; }
+  .breaking-pill::after { display: none; }
+  .b-item a { padding-right: 22px; font-size: 12px; }
+
+  .front-page-grid { grid-template-columns: 1fr; }
+  .front-page-grid > * {
+    padding: 22px 18px;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .front-page-grid > *:last-child { border-bottom: 0; }
+  .fp-lead h1 { font-size: 26px; }
+  .fp-lead .fp-deck { font-size: 16px; }
+
+  .pulse-band { padding: 20px 16px; }
+  .pulse-hd { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .heatmap { grid-template-columns: repeat(3, 1fr); }
+  .heatmap-cell.lg { grid-column: span 2; }
+  .pulse-stock-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  .briefing-band { grid-template-columns: 1fr; gap: 32px; }
+  .briefing-hd { flex-direction: column; align-items: flex-start; gap: 8px; padding-bottom: 12px; }
+  .briefing-hd h2 { font-size: 26px; }
+  .briefing-item { grid-template-columns: 44px 1fr; gap: 14px; padding: 14px 0; }
+  .briefing-num { font-size: 36px; }
+  .briefing-body h3 { font-size: 18px; }
+
+  .voices-grid { grid-template-columns: 1fr; gap: 14px; }
+  .section-band-hd { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .section-band-hd-left h2 { font-size: 26px; }
+
+  .leaderboard-ad .lb-inner { padding: 22px 0; }
+  .lb-content { grid-template-columns: 1fr; gap: 16px; padding: 0 18px; }
+  .lb-headline { font-size: 20px; line-height: 1.2; }
+  .lb-body { font-size: 13px; }
+  .lb-cta { width: 100%; justify-content: center; }
+  .leaderboard-ad .ad-tag { position: static; display: block; margin: 0 18px 8px; }
+
+  .newsletter-band { padding: 40px 0; }
+  .newsletter-band .wrap { gap: 24px; }
+  .nb-stats { flex-wrap: wrap; gap: 20px; }
+  .nb-form { padding: 20px; }
+
+  .footer-cols { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .footer-logo-block { grid-column: 1 / -1; }
+  .footer-top { padding: 36px 0 28px; }
+  .footer-bottom .wrap { flex-direction: column; gap: 8px; text-align: center; }
+
+  .site-body { padding: 20px 0 40px; }
+  .front-page, .briefing-band, .voices-band, .pulse-band { margin-bottom: 32px; }
+
+  /* Article page */
+  .article-headline, h1.article-headline { font-size: 32px !important; }
+  .article-deck { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+  .topbar { padding: 0 12px; }
+  .topbar .wrap { padding: 0; gap: 8px; }
+  .topbar-edition { display: none; }
+  .topbar-social { gap: 10px; }
+
+  .market-label { padding: 0 10px; font-size: 9px; }
+  .ticker-item { padding: 0 14px; gap: 6px; font-size: 11px; }
+
+  .wrap, .wrap-wide { padding-inline: 14px; }
+
+  .breaking-bar { height: 32px; }
+  .b-item a { padding-right: 18px; font-size: 11.5px; }
+
+  .heatmap { grid-template-columns: repeat(2, 1fr); }
+  .heatmap-cell.lg { grid-column: span 2; }
+  .heatmap-cell { padding: 10px 12px; min-height: 64px; }
+  .hm-name { font-size: 10px; }
+  .hm-pct { font-size: 14px; }
+  .heatmap-cell.lg .hm-pct { font-size: 20px; }
+
+  .fp-lead h1 { font-size: 22px; line-height: 1.15; }
+  .briefing-num { font-size: 30px; }
+  .briefing-body h3 { font-size: 17px; }
+  .briefing-body p { font-size: 13px; }
+
+  .newsletter-band h2 { font-size: 22px; }
+
+  .footer-cols { grid-template-columns: 1fr; }
+
+  .voice-card { padding: 16px; }
+  .voice-card h4 { font-size: 15px; }
 }
