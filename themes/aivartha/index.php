@@ -10,11 +10,47 @@ if (is_home() && !is_paged()):
     get_template_part('template-parts/front-page');
     get_template_part('template-parts/ads/leaderboard');
     get_template_part('template-parts/markets-pulse');
+
+    // Wide sponsor ad — between Markets Pulse and The Briefing
+    get_template_part('template-parts/ads/sponsor-leaderboard', null, [
+      'slot'     => 'ad-leaderboard-pulse',
+      'sponsor'  => 'HDFC Securities',
+      'headline' => 'Trade Equity, F&O & Commodity — all on one screen.',
+      'body'     => '₹0 brokerage on intraday equity. Free research reports. SEBI-registered since 2000.',
+      'cta'      => 'Open account',
+      'cta_url'  => '#',
+      'kind'     => 'sponsor',
+    ]);
+
     get_template_part('template-parts/briefing');
     get_template_part('template-parts/banking-band');
     get_template_part('template-parts/ads/native');
     get_template_part('template-parts/index-stories');
+
+    // Wide house ad — above Voices
+    get_template_part('template-parts/ads/sponsor-leaderboard', null, [
+      'slot'     => 'ad-leaderboard-voices-top',
+      'sponsor'  => 'PaisaBot Daily Brief',
+      'headline' => "The day's markets — read in three minutes, every morning.",
+      'body'     => 'Sent at 7am IST. Written by the same desk that publishes paisabot.com. 128,000 readers.',
+      'cta'      => 'Subscribe free',
+      'cta_url'  => home_url('/subscribe'),
+      'kind'     => 'house',
+    ]);
+
     get_template_part('template-parts/voices-band');
+
+    // Wide sponsor ad — below Voices
+    get_template_part('template-parts/ads/sponsor-leaderboard', null, [
+      'slot'     => 'ad-leaderboard-voices',
+      'sponsor'  => 'Bajaj Allianz Life Insurance',
+      'headline' => 'Build a ₹1 Crore corpus — start with ₹2,500 a month.',
+      'body'     => "Tax-free returns under Sec 10(10D). Long-term wealth creation backed by India's largest private insurer. Trusted by 8 crore Indians.",
+      'cta'      => 'Check your plan',
+      'cta_url'  => '#',
+      'kind'     => 'sponsor',
+    ]);
+
     get_template_part('template-parts/global-band');
 
 else:

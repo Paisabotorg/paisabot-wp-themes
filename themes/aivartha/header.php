@@ -75,17 +75,9 @@
   <div class="wrap">
     <div class="header-inner">
 
-      <a class="site-logo" href="<?php echo esc_url(home_url('/')); ?>" rel="home">
-        <svg class="logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="40" height="40" rx="9" fill="#1B2E45"/>
-          <rect x="7"  y="22" width="5"  height="12" rx="2" fill="#C4820A"/>
-          <rect x="14" y="15" width="5"  height="19" rx="2" fill="#C4820A" opacity=".75"/>
-          <rect x="21" y="9"  width="5"  height="25" rx="2" fill="#C4820A" opacity=".5"/>
-          <rect x="28" y="5"  width="5"  height="29" rx="2" fill="#C4820A" opacity=".3"/>
-          <path d="M9.5 19 L17 12 L24 8 L31.5 4.5" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity=".35"/>
-        </svg>
+      <a class="site-logo" href="<?php echo esc_url(home_url('/')); ?>" rel="home" aria-label="PaisaBot home">
         <span class="logo-text">
-          <span class="logo-name">AI&nbsp;<em>Vartha</em></span>
+          <span class="logo-name"><span class="paisa-pill">Paisa</span><em>Bot</em></span>
           <span class="logo-sub"><?php echo esc_html(get_bloginfo('description') ?: 'Economic Intelligence'); ?></span>
         </span>
       </a>

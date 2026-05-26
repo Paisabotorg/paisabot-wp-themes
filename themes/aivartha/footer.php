@@ -11,7 +11,7 @@
       <div class="footer-cols">
 
         <div class="footer-logo-block">
-          <span class="footer-logo-name">AI&nbsp;<em>Vartha</em></span>
+          <span class="footer-logo-name"><span class="paisa-pill">Paisa</span><em>Bot</em></span>
           <p class="footer-desc"><?php echo esc_html(get_bloginfo('description') ?: 'Trusted economic and financial news in your language, powered by AI translation and an editorial team of veteran journalists.'); ?></p>
           <div class="footer-socials">
             <a href="#" aria-label="Facebook"><?php echo aiv_icon('i-fb'); ?></a>
