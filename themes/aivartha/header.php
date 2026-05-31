@@ -75,10 +75,12 @@
   <div class="wrap">
     <div class="header-inner">
 
-      <button class="icon-btn hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">
+      <!-- Hamburger — leftmost on mobile, hidden on desktop -->
+      <button class="icon-btn hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
         <?php echo aiv_icon('menu'); ?>
       </button>
 
+      <!-- Logo — desktop: natural flow; mobile: centered via flex -->
       <a class="site-logo" href="<?php echo esc_url(home_url('/')); ?>" rel="home" aria-label="PaisaBot home">
         <span class="logo-text">
           <span class="logo-name"><span class="paisa-pill">Paisa</span><em>Bot</em></span>
@@ -86,49 +88,140 @@
         </span>
       </a>
 
+      <!-- Primary nav — desktop only -->
       <nav class="primary-nav" id="primary-nav" aria-label="Primary navigation">
         <?php wp_nav_menu([
           'theme_location' => 'primary',
           'menu_class'     => 'nav-list',
           'container'      => false,
           'fallback_cb'    => function() {
-            // Default sections — slug-based lookup works on all language sites
             $defaults = [
-                'home'           => ['label'=>'Home',           'url'=>home_url('/')],
-                'markets'        => ['label'=>'Markets',        'url'=>'https://markets.paisabot.com', 'external'=>true],
-                'stocks'         => ['label'=>'Stocks',         'url'=>'https://analyse.paisabot.com', 'external'=>true],
-                'policy'         => ['label'=>'Policy',         'url'=>aiv_cat_url('policy')],
-                'banking'        => ['label'=>'Banking',        'url'=>aiv_cat_url('banking')],
-                'economy'        => ['label'=>'Economy',        'url'=>aiv_cat_url('economy')],
-                'global'         => ['label'=>'Global',         'url'=>aiv_cat_url('global')],
-                'foreign-policy' => ['label'=>'Foreign Policy', 'url'=>aiv_cat_url('foreign-policy')],
-                'technology'     => ['label'=>'Technology',     'url'=>aiv_cat_url('technology')],
-                'opinion'        => ['label'=>'Opinion',        'url'=>aiv_cat_url('opinion')],
+              'home'           => ['label'=>'Home',           'url'=>home_url('/')],
+              'markets'        => ['label'=>'Markets',        'url'=>'https://markets.paisabot.com', 'external'=>true],
+              'stocks'         => ['label'=>'Stocks',         'url'=>'https://analyse.paisabot.com', 'external'=>true],
+              'policy'         => ['label'=>'Policy',         'url'=>aiv_cat_url('policy')],
+              'banking'        => ['label'=>'Banking',        'url'=>aiv_cat_url('banking')],
+              'economy'        => ['label'=>'Economy',        'url'=>aiv_cat_url('economy')],
+              'global'         => ['label'=>'Global',         'url'=>aiv_cat_url('global')],
+              'foreign-policy' => ['label'=>'Foreign Policy', 'url'=>aiv_cat_url('foreign-policy')],
+              'technology'     => ['label'=>'Technology',     'url'=>aiv_cat_url('technology')],
+              'opinion'        => ['label'=>'Opinion',        'url'=>aiv_cat_url('opinion')],
             ];
             echo '<ul class="nav-list">';
             foreach ($defaults as $slug => $item) {
-                $url      = $item['url'] ?: home_url('/category/' . $slug);
-                $active   = (is_home() && $slug === 'home') || (is_category($slug));
-                $ext_attr = !empty($item['external']) ? ' target="_blank" rel="noopener noreferrer"' : '';
-                echo '<li><a href="' . esc_url($url) . '"' . ($active ? ' class="is-active"' : '') . $ext_attr . '>' . esc_html($item['label']) . '</a></li>';
+              $url      = $item['url'] ?: home_url('/category/' . $slug);
+              $active   = (is_home() && $slug === 'home') || (is_category($slug));
+              $ext_attr = !empty($item['external']) ? ' target="_blank" rel="noopener noreferrer"' : '';
+              echo '<li><a href="' . esc_url($url) . '"' . ($active ? ' class="is-active"' : '') . $ext_attr . '>' . esc_html($item['label']) . '</a></li>';
             }
             echo '</ul>';
           },
         ]); ?>
       </nav>
 
+      <!-- Right actions: Subscribe · Search · Profile -->
       <div class="header-actions">
+        <a class="btn-subscribe" href="<?php echo esc_url(home_url('/subscribe')); ?>">
+          <?php echo aiv_icon('i-star'); ?> <span class="btn-subscribe-label">Subscribe</span>
+        </a>
+
         <button class="icon-btn" id="search-btn" aria-label="Search" aria-expanded="false">
           <?php echo aiv_icon('search'); ?>
         </button>
-        <a class="btn-subscribe" href="<?php echo esc_url(home_url('/subscribe')); ?>">
-          <?php echo aiv_icon('i-star'); ?> Subscribe
-        </a>
+
+        <!-- Profile button + dropdown -->
+        <div class="profile-wrap" id="profile-wrap">
+          <button class="icon-btn profile-btn" id="profile-btn" aria-label="Account" aria-expanded="false" aria-haspopup="true">
+            <span class="profile-avatar" id="profile-avatar" aria-hidden="true">
+              <?php echo aiv_icon('user'); ?>
+            </span>
+          </button>
+
+          <div class="profile-drop" id="profile-drop" role="dialog" aria-label="Account panel" hidden>
+            <!-- Loading state -->
+            <div class="pd-loading" id="pd-loading">
+              <div class="pd-skel"></div>
+              <div class="pd-skel pd-skel-sm"></div>
+              <div class="pd-skel pd-skel-sm"></div>
+            </div>
+            <!-- Logged-in state (filled by JS) -->
+            <div class="pd-user" id="pd-user" hidden>
+              <div class="pd-head">
+                <div class="pd-avatar-wrap">
+                  <img class="pd-avatar-img" id="pd-avatar-img" src="" alt="" width="40" height="40" hidden>
+                  <span class="pd-avatar-initials" id="pd-avatar-initials"></span>
+                </div>
+                <div class="pd-identity">
+                  <span class="pd-name" id="pd-name"></span>
+                  <span class="pd-email" id="pd-email"></span>
+                </div>
+              </div>
+              <div class="pd-status">
+                <span class="pd-tier" id="pd-tier"></span>
+                <span class="pd-expires" id="pd-expires"></span>
+              </div>
+              <nav class="pd-links">
+                <a href="<?php echo esc_url(home_url('/account')); ?>" class="pd-link">
+                  <?php echo aiv_icon('user'); ?> My Account
+                </a>
+                <a href="<?php echo esc_url(home_url('/subscribe')); ?>" class="pd-link pd-link-upgrade" id="pd-upgrade" hidden>
+                  <?php echo aiv_icon('i-star'); ?> Upgrade to Pro
+                </a>
+                <a href="<?php echo esc_url(home_url('/account/settings')); ?>" class="pd-link">
+                  <?php echo aiv_icon('i-arrow-r'); ?> Settings
+                </a>
+                <button class="pd-link pd-signout" id="pd-signout">
+                  <?php echo aiv_icon('i-arrow-r'); ?> Sign out
+                </button>
+              </nav>
+            </div>
+            <!-- Logged-out state -->
+            <div class="pd-guest" id="pd-guest" hidden>
+              <p class="pd-guest-msg">Sign in to access your watchlist, newsletters, and premium articles.</p>
+              <a href="https://auth.paisabot.com/auth/google" class="pd-signin-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                Continue with Google
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
     </div>
   </div>
 </header>
+
+<!-- ▸ MOBILE NAV DRAWER (slides in from left on hamburger click) -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay" hidden aria-hidden="true"></div>
+<div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Navigation menu" hidden>
+  <div class="mnd-head">
+    <a class="site-logo mnd-logo" href="<?php echo esc_url(home_url('/')); ?>">
+      <span class="logo-name"><span class="paisa-pill">Paisa</span><em>Bot</em></span>
+    </a>
+    <button class="icon-btn mnd-close" id="mnd-close" aria-label="Close menu">
+      <?php echo aiv_icon('i-close'); ?>
+    </button>
+  </div>
+  <nav class="mnd-nav">
+    <ul class="mnd-list">
+      <li><a href="<?php echo esc_url(home_url('/')); ?>"><?php echo aiv_icon('i-home'); ?> Home</a></li>
+      <li><a href="https://markets.paisabot.com" target="_blank" rel="noopener noreferrer"><?php echo aiv_icon('i-trend-up'); ?> Markets</a></li>
+      <li><a href="https://analyse.paisabot.com" target="_blank" rel="noopener noreferrer"><?php echo aiv_icon('i-trend-up'); ?> Stocks</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('policy')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Policy</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('banking')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Banking</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('economy')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Economy</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('global')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Global</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('foreign-policy')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Foreign Policy</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('technology')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Technology</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('opinion')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Opinion</a></li>
+    </ul>
+  </nav>
+  <div class="mnd-footer">
+    <a class="btn-subscribe" href="<?php echo esc_url(home_url('/subscribe')); ?>">
+      <?php echo aiv_icon('i-star'); ?> Subscribe
+    </a>
+  </div>
+</div>
 
 <!-- ▸ BREAKING TICKER -->
 <?php $bp = aiv_breaking(); if ($bp): ?>
@@ -163,3 +256,4 @@
 
 <main class="site-body">
   <div class="wrap">
+
