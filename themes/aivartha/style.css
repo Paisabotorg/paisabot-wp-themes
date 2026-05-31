@@ -2586,9 +2586,11 @@ svg.flip { transform: scaleX(-1); }
   :root {
     --header-h: 56px;
     --topbar-h: 0px;
+    --ticker-h: 32px;
+    --breaking-h: 36px;
     --gap: 16px;
   }
-  .wrap { padding-inline: 16px; }
+  .wrap, .wrap-wide { padding-inline: 16px; }
 
   /* HIDE chrome strips that won't fit */
   .topbar { display: none; }
@@ -2597,11 +2599,10 @@ svg.flip { transform: scaleX(-1); }
   .ticker-item { font-size: 11px; padding: 0 16px; }
   .ticker-item .t-name { font-size: 9px; }
 
-  /* Header — show hamburger, hide nav */
+  /* Header — show hamburger (first in DOM = far left), hide nav */
   .primary-nav { display: none; }
   .hamburger { display: flex; }
-  /* Switch to flex so hamburger (first in DOM) appears at far left */
-  .header-inner { display: flex; align-items: center; gap: 12px; }
+  .header-inner { display: flex; align-items: center; gap: 10px; }
   .site-logo { flex: 1; }
   .header-actions .btn-subscribe { display: none; }
   .logo-name { font-size: 18px; }
@@ -2770,6 +2771,20 @@ svg.flip { transform: scaleX(-1); }
   /* Section spacing */
   .section-band, .pulse-band, .briefing-band, .voices-band, .news-section { margin-bottom: 32px; }
   .section-band-hd h2 { font-size: 22px; }
+  .section-band-hd { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .section-band-hd-left h2 { font-size: 26px; }
+
+  /* Sponsor leaderboard ad */
+  .leaderboard-ad .lb-inner { padding: 22px 0; }
+  .lb-content { grid-template-columns: 1fr; gap: 16px; padding: 0 18px; }
+  .lb-headline { font-size: 20px; line-height: 1.2; }
+  .lb-body { font-size: 13px; }
+  .lb-cta { width: 100%; justify-content: center; }
+  .leaderboard-ad .ad-tag { position: static; display: block; margin: 0 18px 8px; }
+
+  /* Search overlay — give breathing room on mobile */
+  .search-overlay { padding-top: 8vh; }
+  .search-box input[type="search"] { font-size: 16px; }
 }
 
 /* ── 480px — phone portrait ───────────────────────────────────────── */
@@ -3139,9 +3154,10 @@ svg.flip { transform: scaleX(-1); }
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   padding: 12px 16px;
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 600px;
   box-shadow: var(--s-xl);
+  margin: 0 16px;
 }
 .search-box form {
   display: flex; align-items: center; gap: 12px;
@@ -3800,117 +3816,6 @@ body.category-markets .site-body {
   .dateline-indices { display: none; }
 }
 
-@media (max-width: 768px) {
-  .wrap, .wrap-wide { padding-inline: 18px; }
-  :root {
-    --header-h: 58px;
-    --topbar-h: 34px;
-    --ticker-h: 32px;
-    --breaking-h: 36px;
-  }
-
-  .topbar { font-size: 10.5px; }
-  .topbar-date { display: none; }
-  .topbar-edition { border-left: 0; padding-left: 0; font-size: 9.5px; }
-  .topbar-social { gap: 12px; }
-
-  .primary-nav { display: none; }
-  .hamburger { display: inline-flex !important; }
-  .header-inner { display: flex; align-items: center; gap: 10px; }
-  .site-logo { flex: 1; }
-  .btn-subscribe { padding: 0 12px; font-size: 11.5px; }
-  .btn-subscribe svg { display: none; }
-  .logo-text { display: none; }
-
-  .breaking-pill { padding: 0 12px; font-size: 9.5px; }
-  .breaking-pill::after { display: none; }
-  .b-item a { padding-right: 22px; font-size: 12px; }
-
-  .front-page-grid { grid-template-columns: 1fr; }
-  .front-page-grid > * {
-    padding: 22px 18px;
-    border-right: 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .front-page-grid > *:last-child { border-bottom: 0; }
-  .fp-lead h1 { font-size: 26px; }
-  .fp-lead .fp-deck { font-size: 16px; }
-
-  .pulse-band { padding: 20px 16px; }
-  .pulse-hd { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .heatmap { grid-template-columns: repeat(3, 1fr); }
-  .heatmap-cell.lg { grid-column: span 2; }
-  .pulse-stock-grid { grid-template-columns: 1fr; gap: 10px; }
-
-  .briefing-band { grid-template-columns: 1fr; gap: 32px; }
-  .briefing-hd { flex-direction: column; align-items: flex-start; gap: 8px; padding-bottom: 12px; }
-  .briefing-hd h2 { font-size: 26px; }
-  .briefing-item { grid-template-columns: 44px 1fr; gap: 14px; padding: 14px 0; }
-  .briefing-num { font-size: 36px; }
-  .briefing-body h3 { font-size: 18px; }
-
-  .voices-grid { grid-template-columns: 1fr; gap: 14px; }
-  .section-band-hd { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .section-band-hd-left h2 { font-size: 26px; }
-
-  .leaderboard-ad .lb-inner { padding: 22px 0; }
-  .lb-content { grid-template-columns: 1fr; gap: 16px; padding: 0 18px; }
-  .lb-headline { font-size: 20px; line-height: 1.2; }
-  .lb-body { font-size: 13px; }
-  .lb-cta { width: 100%; justify-content: center; }
-  .leaderboard-ad .ad-tag { position: static; display: block; margin: 0 18px 8px; }
-
-  .newsletter-band { padding: 40px 0; }
-  .newsletter-band .wrap { gap: 24px; }
-  .nb-stats { flex-wrap: wrap; gap: 20px; }
-  .nb-form { padding: 20px; }
-
-  .footer-cols { grid-template-columns: 1fr 1fr; gap: 28px; }
-  .footer-logo-block { grid-column: 1 / -1; }
-  .footer-top { padding: 36px 0 28px; }
-  .footer-bottom .wrap { flex-direction: column; gap: 8px; text-align: center; }
-
-  .site-body { padding: 20px 0 40px; }
-  .front-page, .briefing-band, .voices-band, .pulse-band { margin-bottom: 32px; }
-
-  /* Article page */
-  .article-headline, h1.article-headline { font-size: 32px !important; }
-  .article-deck { font-size: 18px; }
-}
-
-@media (max-width: 480px) {
-  .topbar { padding: 0 12px; }
-  .topbar .wrap { padding: 0; gap: 8px; }
-  .topbar-edition { display: none; }
-  .topbar-social { gap: 10px; }
-
-  .market-label { padding: 0 10px; font-size: 9px; }
-  .ticker-item { padding: 0 14px; gap: 6px; font-size: 11px; }
-
-  .wrap, .wrap-wide { padding-inline: 14px; }
-
-  .breaking-bar { height: 32px; }
-  .b-item a { padding-right: 18px; font-size: 11.5px; }
-
-  .heatmap { grid-template-columns: repeat(2, 1fr); }
-  .heatmap-cell.lg { grid-column: span 2; }
-  .heatmap-cell { padding: 10px 12px; min-height: 64px; }
-  .hm-name { font-size: 10px; }
-  .hm-pct { font-size: 14px; }
-  .heatmap-cell.lg .hm-pct { font-size: 20px; }
-
-  .fp-lead h1 { font-size: 22px; line-height: 1.15; }
-  .briefing-num { font-size: 30px; }
-  .briefing-body h3 { font-size: 17px; }
-  .briefing-body p { font-size: 13px; }
-
-  .newsletter-band h2 { font-size: 22px; }
-
-  .footer-cols { grid-template-columns: 1fr; }
-
-  .voice-card { padding: 16px; }
-  .voice-card h4 { font-size: 15px; }
-}
 
 /* ═══════════════════════════════════════════════════════════════
    404 PAGE
