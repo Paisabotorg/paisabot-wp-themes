@@ -97,7 +97,15 @@ else:
         </div>
 
         <div class="archive-pagination" style="margin-top:24px">
-          <?php echo paginate_links(['total'=>$GLOBALS['wp_query']->max_num_pages,'mid_size'=>2,'prev_text'=>'&larr;','next_text'=>'&rarr;','type'=>'list']); ?>
+          <?php echo paginate_links([
+            'base'      => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
+            'total'     => $GLOBALS['wp_query']->max_num_pages,
+            'current'   => max(1, get_query_var('paged')),
+            'mid_size'  => 2,
+            'prev_text' => '&larr;',
+            'next_text' => '&rarr;',
+            'type'      => 'list',
+          ]); ?>
         </div>
         <?php else: ?>
         <div class="empty-state">
