@@ -156,9 +156,8 @@
         var expires  = me.expires_at ? new Date(me.expires_at).toLocaleDateString() : '';
         var avatarUrl = me.avatar_url || me.picture || '';
 
-        /* Use raw name for initials/avatar alt, masked for display */
         var initials    = rawName.split(' ').map(function (w) { return w[0]; }).join('').slice(0,2).toUpperCase();
-        var displayName = maskName(rawName);
+        var displayName = rawName;
 
         var el = function(id) { return document.getElementById(id); };
 
