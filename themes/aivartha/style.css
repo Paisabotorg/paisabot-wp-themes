@@ -548,6 +548,7 @@ html { scroll-padding-top: calc(var(--header-h) + 12px); }
 .pd-identity { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .pd-name { font-size: 14px; font-weight: 700; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pd-email { font-size: 11px; color: var(--fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pd-phone { font-size: 11px; color: var(--fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-mono); letter-spacing: .04em; }
 
 .pd-status {
   display: flex; align-items: center; justify-content: space-between;

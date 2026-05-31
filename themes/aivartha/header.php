@@ -154,6 +154,7 @@
                 <div class="pd-identity">
                   <span class="pd-name" id="pd-name"></span>
                   <span class="pd-email" id="pd-email"></span>
+                  <span class="pd-phone" id="pd-phone" hidden></span>
                 </div>
               </div>
               <div class="pd-status">
