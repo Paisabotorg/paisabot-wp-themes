@@ -467,8 +467,8 @@ html { scroll-padding-top: calc(var(--header-h) + 12px); }
 .icon-btn:hover { background: var(--amber-soft); color: var(--navy); }
 .icon-btn svg { width: 18px; height: 18px; }
 
-/* Hamburger hidden on desktop — placed after .icon-btn to win the cascade */
-.hamburger { display: none; }
+/* Hamburger hidden on desktop — higher specificity (.site-header .hamburger = 0-2-0) beats .icon-btn (0-1-0) */
+.site-header .hamburger { display: none; }
 
 .btn-subscribe {
   display: inline-flex; align-items: center; gap: 6px;
@@ -2791,7 +2791,7 @@ svg.flip { transform: scaleX(-1); }
 
   /* Header — hamburger far left, logo stretches to fill, actions on right */
   .primary-nav { display: none; }
-  .hamburger { display: flex; flex-shrink: 0; }
+  .site-header .hamburger { display: flex; flex-shrink: 0; }
   .header-inner { display: flex; align-items: center; gap: 10px; }
   .site-logo { flex: 1; justify-content: center; }
   .header-actions .btn-subscribe { display: none; }
