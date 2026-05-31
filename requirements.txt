@@ -1,2 +1,1 @@
-# Theme Publisher — FTP deploy + Hostinger MCP
-python-dotenv>=1.0.1
+# deploy.py uses only Python standard library — no external dependencies
