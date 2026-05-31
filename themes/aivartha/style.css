@@ -1205,7 +1205,7 @@ html { scroll-padding-top: calc(var(--header-h) + 12px); }
   display: grid; grid-template-columns: 1fr 300px;
   gap: 48px; align-items: start; margin-top: 24px;
 }
-.art-body { min-width: 0; max-width: 740px; margin: 0 auto; width: 100%; }
+.art-body { min-width: 0; max-width: 740px; margin: 0; width: 100%; }
 
 .art-body p {
   font-family: var(--font-serif);
