@@ -145,9 +145,10 @@ function aivartha_font_url(): string {
 }
 
 function aivartha_enqueue() {
+    $ver = wp_get_theme()->get('Version');
     wp_enqueue_style('paisabot-fonts', aivartha_font_url(), [], null);
-    wp_enqueue_style('paisabot-style', get_stylesheet_uri(), ['paisabot-fonts'], '4.0.0');
-    wp_enqueue_script('paisabot-js', get_template_directory_uri() . '/assets/js/main.js', [], '4.0.0', true);
+    wp_enqueue_style('paisabot-style', get_stylesheet_uri(), ['paisabot-fonts'], $ver);
+    wp_enqueue_script('paisabot-js', get_template_directory_uri() . '/assets/js/main.js', [], $ver, true);
     if (is_singular()) wp_enqueue_script('comment-reply');
 }
 add_action('wp_enqueue_scripts', 'aivartha_enqueue');
