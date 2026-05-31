@@ -414,9 +414,6 @@ html { scroll-padding-top: calc(var(--header-h) + 12px); }
   gap: 24px;
 }
 
-/* Hamburger hidden on desktop */
-.hamburger { display: none; }
-
 .site-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
 .logo-text { display: flex; flex-direction: column; line-height: 1; }
 .logo-name {
@@ -469,6 +466,9 @@ html { scroll-padding-top: calc(var(--header-h) + 12px); }
 }
 .icon-btn:hover { background: var(--amber-soft); color: var(--navy); }
 .icon-btn svg { width: 18px; height: 18px; }
+
+/* Hamburger hidden on desktop — placed after .icon-btn to win the cascade */
+.hamburger { display: none; }
 
 .btn-subscribe {
   display: inline-flex; align-items: center; gap: 6px;
