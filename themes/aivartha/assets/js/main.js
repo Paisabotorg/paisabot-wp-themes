@@ -114,6 +114,32 @@
     }
   }
 
+  /* ── PII masking helpers ─────────────────────────────────────────── */
+  function maskEmail(email) {
+    if (!email) return '';
+    var parts = email.split('@');
+    if (parts.length !== 2) return '***';
+    var local  = parts[0];
+    var domain = parts[1];
+    var show   = local.length > 2 ? local.slice(0, 2) : local.slice(0, 1);
+    return show + '***@' + domain;
+  }
+
+  function maskPhone(phone) {
+    if (!phone) return '';
+    var digits = phone.replace(/\D/g, '');
+    return '******' + digits.slice(-4);
+  }
+
+  function maskName(name) {
+    if (!name) return '';
+    var words = name.trim().split(/\s+/);
+    return words.map(function (w, i) {
+      // Show full first name, mask subsequent names to initial + ***
+      return i === 0 ? w : w.slice(0, 1) + '***';
+    }).join(' ');
+  }
+
   function loadProfileState() {
     var loading  = document.getElementById('pd-loading');
     var userEl   = document.getElementById('pd-user');
@@ -122,25 +148,35 @@
     fetch('https://auth.paisabot.com/me', { credentials: 'include' })
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function (me) {
-        /* ── Populate signed-in panel ── */
-        var name     = me.name     || me.display_name || '';
-        var email    = me.email    || '';
+        /* ── Populate signed-in panel (mask PII before display) ── */
+        var rawName  = me.name     || me.display_name || '';
+        var rawEmail = me.email    || '';
+        var rawPhone = me.phone    || me.phone_number  || '';
         var tier     = (me.tier    || me.plan || 'free').toLowerCase();
         var expires  = me.expires_at ? new Date(me.expires_at).toLocaleDateString() : '';
         var avatarUrl = me.avatar_url || me.picture || '';
-        var initials = name.split(' ').map(function (w) { return w[0]; }).join('').slice(0,2).toUpperCase();
+
+        /* Use raw name for initials/avatar alt, masked for display */
+        var initials    = rawName.split(' ').map(function (w) { return w[0]; }).join('').slice(0,2).toUpperCase();
+        var displayName = maskName(rawName);
 
         var el = function(id) { return document.getElementById(id); };
 
         if (avatarUrl) {
           el('pd-avatar-img').src = avatarUrl;
-          el('pd-avatar-img').alt = name;
+          el('pd-avatar-img').alt = initials;   /* no raw name in DOM attr */
           el('pd-avatar-img').hidden = false;
         } else {
           el('pd-avatar-initials').textContent = initials;
         }
-        el('pd-name').textContent    = name;
-        el('pd-email').textContent   = email;
+        el('pd-name').textContent  = displayName;
+        el('pd-email').textContent = maskEmail(rawEmail);
+
+        /* Show phone only if present, always masked */
+        if (rawPhone) {
+          var phoneEl = el('pd-phone');
+          if (phoneEl) { phoneEl.textContent = maskPhone(rawPhone); phoneEl.hidden = false; }
+        }
 
         var tierEl = el('pd-tier');
         tierEl.textContent = tier === 'pro' ? 'Pro' : 'Free';
