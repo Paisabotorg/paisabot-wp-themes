@@ -22,7 +22,7 @@ FTP_HOST = "217.21.85.66"
 FTP_PORT = 21
 
 LOCAL_AIVARTHA  = str(Path(__file__).parent / "themes" / "aivartha")
-LOCAL_ARTHANAMA = str(Path(__file__).parent / "themes" / "arthanama")
+LOCAL_MU_PLUGIN = str(Path(__file__).parent / "mu-plugins" / "paisabot-activate-theme.php")
 
 SITES = {
     "qa": {
@@ -40,20 +40,20 @@ SITES = {
     "hi": {
         "label":      "hi.paisabot.com",
         "user":       "u928714162.hi.paisabot.com",
-        "theme_dir":  LOCAL_ARTHANAMA,
-        "remote_dir": "wp-content/themes/arthanama",
+        "theme_dir":  LOCAL_AIVARTHA,
+        "remote_dir": "wp-content/themes/aivartha",
     },
     "ml": {
         "label":      "ml.paisabot.com",
         "user":       "u928714162.ml.paisabot.com",
-        "theme_dir":  LOCAL_ARTHANAMA,
-        "remote_dir": "wp-content/themes/arthanama",
+        "theme_dir":  LOCAL_AIVARTHA,
+        "remote_dir": "wp-content/themes/aivartha",
     },
     "tel": {
         "label":      "tel.paisabot.com",
         "user":       "u928714162.tel.paisabot.com",
-        "theme_dir":  LOCAL_ARTHANAMA,
-        "remote_dir": "wp-content/themes/arthanama",
+        "theme_dir":  LOCAL_AIVARTHA,
+        "remote_dir": "wp-content/themes/aivartha",
     },
 }
 
@@ -132,6 +132,15 @@ def deploy_site(key, cfg, password):
             ftp.cwd("public_html")
         except ftplib.error_perm:
             print("  Note: already at public_html root")
+
+        # Ensure mu-plugins dir exists and upload theme-activation plugin
+        ensure_remote_dir(ftp, "wp-content/mu-plugins")
+        try:
+            with open(LOCAL_MU_PLUGIN, "rb") as f:
+                ftp.storbinary("STOR wp-content/mu-plugins/paisabot-activate-theme.php", f)
+            print("  ✓ wp-content/mu-plugins/paisabot-activate-theme.php")
+        except Exception as e:
+            print(f"  ⚠ mu-plugin upload failed: {e}")
 
         start = time.time()
         total, failed = upload_dir(ftp, theme_dir, remote_dir)

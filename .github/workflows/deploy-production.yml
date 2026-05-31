@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy all production sites
+    name: Deploy aivartha to all production sites
     runs-on: ubuntu-latest
     environment: production
 
@@ -24,20 +24,20 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: python deploy.py paisabot
 
-      - name: hi.paisabot.com (arthanama)
+      - name: hi.paisabot.com (aivartha)
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: python deploy.py hi
 
-      - name: ml.paisabot.com (arthanama)
+      - name: ml.paisabot.com (aivartha)
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: python deploy.py ml
 
-      - name: tel.paisabot.com (arthanama)
+      - name: tel.paisabot.com (aivartha)
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: python deploy.py tel
 
       - name: Done
-        run: echo "✅ All 4 production sites deployed (commit ${{ github.sha }})"
+        run: echo "✅ All 4 production sites deployed with aivartha theme (commit ${{ github.sha }})"
