@@ -2,8 +2,8 @@
 Theme Name: PaisaBot Editorial
 Theme URI: https://paisabot.com
 Author: PaisaBot Editorial
-Description: PaisaBot v4.0.1 — broadsheet editorial theme for paisabot.com. New paisa-coin logo lockup, full-bleed sponsor leaderboards above Briefing and around Voices, mobile-first responsive across 480/768/1024/1280 breakpoints, refined ad-zone widget areas. Tuned for English (latin) and Indic editions via the arthanama sibling.
-Version: 4.0.1
+Description: PaisaBot v4.0.2 — broadsheet editorial theme for paisabot.com. New paisa-coin logo lockup, full-bleed sponsor leaderboards above Briefing and around Voices, mobile-first responsive across 480/768/1024/1280 breakpoints, refined ad-zone widget areas. Tuned for English (latin) and Indic editions via the arthanama sibling.
+Version: 4.0.2
 Requires at least: 6.0
 Requires PHP: 8.0
 License: GNU General Public License v2 or later
@@ -2950,11 +2950,11 @@ svg.flip { transform: scaleX(-1); }
 
   /* Sponsor leaderboard ad */
   .leaderboard-ad .lb-inner { padding: 22px 0; }
-  .lb-content { grid-template-columns: 1fr; gap: 16px; padding: 0 18px; }
+  .lb-content { grid-template-columns: 1fr; gap: 16px; padding: 0 20px; }
   .lb-headline { font-size: 20px; line-height: 1.2; }
   .lb-body { font-size: 13px; }
   .lb-cta { width: 100%; justify-content: center; }
-  .leaderboard-ad .ad-tag { position: static; display: block; margin: 0 18px 8px; }
+  .leaderboard-ad .ad-tag { position: static; display: block; margin: 0 20px 8px; }
 
   /* Search overlay — give breathing room on mobile */
   .search-overlay { padding-top: 8vh; }
@@ -3879,7 +3879,7 @@ body.category-markets .site-body {
   gap: 40px; align-items: center;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 24px;
 }
 .lb-content-widget { display: block; }
 .lb-sponsor {

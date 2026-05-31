@@ -41,5 +41,6 @@ add_action('wp_head', function () {
         . '@media(max-width:768px){.site-header .hamburger{display:flex!important;flex-shrink:0!important}}'
         . '.art-head-inner{max-width:none!important;margin:0!important}'
         . '.art-body{margin-left:0!important;margin-right:0!important}'
+        . '.lb-content{padding-left:24px!important;padding-right:24px!important}'
         . '</style>';
 }, 99);
