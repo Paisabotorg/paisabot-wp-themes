@@ -2600,7 +2600,9 @@ svg.flip { transform: scaleX(-1); }
   /* Header — show hamburger, hide nav */
   .primary-nav { display: none; }
   .hamburger { display: flex; }
-  .header-inner { grid-template-columns: auto 1fr auto; gap: 12px; }
+  /* Switch to flex so hamburger (first in DOM) appears at far left */
+  .header-inner { display: flex; align-items: center; gap: 12px; }
+  .site-logo { flex: 1; }
   .header-actions .btn-subscribe { display: none; }
   .logo-name { font-size: 18px; }
   .logo-sub { display: none; }
@@ -3814,6 +3816,8 @@ body.category-markets .site-body {
 
   .primary-nav { display: none; }
   .hamburger { display: inline-flex !important; }
+  .header-inner { display: flex; align-items: center; gap: 10px; }
+  .site-logo { flex: 1; }
   .btn-subscribe { padding: 0 12px; font-size: 11.5px; }
   .btn-subscribe svg { display: none; }
   .logo-text { display: none; }

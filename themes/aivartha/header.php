@@ -75,6 +75,10 @@
   <div class="wrap">
     <div class="header-inner">
 
+      <button class="icon-btn hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">
+        <?php echo aiv_icon('menu'); ?>
+      </button>
+
       <a class="site-logo" href="<?php echo esc_url(home_url('/')); ?>" rel="home" aria-label="PaisaBot home">
         <span class="logo-text">
           <span class="logo-name"><span class="paisa-pill">Paisa</span><em>Bot</em></span>
@@ -120,9 +124,6 @@
         <a class="btn-subscribe" href="<?php echo esc_url(home_url('/subscribe')); ?>">
           <?php echo aiv_icon('i-star'); ?> Subscribe
         </a>
-        <button class="icon-btn hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">
-          <?php echo aiv_icon('menu'); ?>
-        </button>
       </div>
 
     </div>
