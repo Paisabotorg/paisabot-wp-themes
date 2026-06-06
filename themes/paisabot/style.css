@@ -3,7 +3,7 @@ Theme Name: PaisaBot
 Theme URI: https://paisabot.com
 Author: PaisaBot Editorial
 Description: PaisaBot v4.1.0 — broadsheet editorial theme for paisabot.com. Tagline "Economic Intelligence". Paisa-coin logo lockup, full-bleed sponsor leaderboards above Briefing and around Voices, mobile-first responsive across 480/768/1024/1280 breakpoints, refined ad-zone widget areas. Serves English (latin) and Indic editions.
-Version: 4.1.1
+Version: 4.1.2
 Requires at least: 6.0
 Requires PHP: 8.0
 License: GNU General Public License v2 or later
@@ -3914,6 +3914,24 @@ body.category-markets .site-body {
 .lb-cta svg { width: 13px; height: 13px; }
 .leaderboard-ad.lb-sponsor .lb-inner {
   background: linear-gradient(180deg, #FFFCF9, var(--cream-2));
+}
+
+/* Mobile leaderboard overrides — MUST live after the base .leaderboard-ad
+   rules above. The earlier @media(max-width:768px) block (~line 2950) is
+   dead for these selectors: media queries add no specificity, so the base
+   rules below it won at every width, leaving the CTA two-column (overflowing
+   off-screen) and the ad-tag absolutely positioned on phones. */
+@media (max-width: 768px) {
+  .leaderboard-ad .lb-inner { padding: 22px 0; }
+  .leaderboard-ad .lb-content { grid-template-columns: 1fr; gap: 16px; padding: 0 20px; }
+  .leaderboard-ad .lb-headline { font-size: 20px; line-height: 1.2; }
+  .leaderboard-ad .lb-body { font-size: 13px; }
+  .leaderboard-ad .lb-cta { width: 100%; justify-content: center; }
+  .leaderboard-ad .ad-tag {
+    position: static; display: block;
+    right: auto; top: auto;
+    margin: 0 20px 8px; text-align: right;
+  }
 }
 
 /* Footer logo lockup with new coin mark */
