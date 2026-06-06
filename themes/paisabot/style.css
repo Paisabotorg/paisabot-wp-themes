@@ -3,7 +3,7 @@ Theme Name: PaisaBot
 Theme URI: https://paisabot.com
 Author: PaisaBot Editorial
 Description: PaisaBot v4.1.0 — broadsheet editorial theme for paisabot.com. Tagline "Economic Intelligence". Paisa-coin logo lockup, full-bleed sponsor leaderboards above Briefing and around Voices, mobile-first responsive across 480/768/1024/1280 breakpoints, refined ad-zone widget areas. Serves English (latin) and Indic editions.
-Version: 4.1.0
+Version: 4.1.1
 Requires at least: 6.0
 Requires PHP: 8.0
 License: GNU General Public License v2 or later
@@ -3869,7 +3869,12 @@ body.category-markets .site-body {
   padding: 28px 0; position: relative;
 }
 .leaderboard-ad .ad-tag {
-  position: absolute; top: 10px; right: 5%;
+  /* Align the label's right edge with the centered .lb-content column
+     (the ad is full-bleed, so right:5% of the viewport floated the label
+     into the right gutter, detached from the ad box). Mirrors lb-content's
+     max-width + 24px padding so it tracks every breakpoint. */
+  position: absolute; top: 10px;
+  right: max(24px, calc(50% - var(--max-w) / 2 + 24px));
   font-size: 9px; font-weight: 800;
   letter-spacing: .12em; text-transform: uppercase;
   color: var(--fg-muted);
