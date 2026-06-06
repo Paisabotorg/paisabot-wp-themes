@@ -1,6 +1,6 @@
 <?php
 /**
- * PaisaBot — Force aivartha theme on all sites.
+ * PaisaBot — Force the paisabot theme on all sites.
  *
  * Uploaded to wp-content/mu-plugins/ by the deploy pipeline.
  * Uses filters so it works regardless of what the WP database
@@ -8,8 +8,13 @@
  */
 defined('ABSPATH') || exit;
 
-add_filter('template',   fn() => 'aivartha');
-add_filter('stylesheet', fn() => 'aivartha');
+add_filter('template',   fn() => 'paisabot');
+add_filter('stylesheet', fn() => 'paisabot');
+
+// Force the site tagline to "Economic Intelligence" on every site (incl. QA).
+// Uses pre_option_* so it overrides whatever is stored in Settings → General —
+// no DB write, consistent branding everywhere the mu-plugin is deployed.
+add_filter('pre_option_blogdescription', fn() => 'Economic Intelligence');
 
 // Disable comments and pings site-wide
 add_filter('comments_open', '__return_false', 20, 2);
