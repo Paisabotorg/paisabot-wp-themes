@@ -47,5 +47,7 @@ add_action('wp_head', function () {
         . '.art-head-inner{max-width:none!important;margin:0!important}'
         . '.art-body{margin-left:0!important;margin-right:0!important}'
         . '.lb-content{padding-left:24px!important;padding-right:24px!important}'
+        . '.leaderboard-ad .ad-tag{right:max(24px,calc(50% - var(--max-w)/2 + 24px))!important}'
+        . '@media(max-width:768px){.leaderboard-ad .ad-tag{position:static!important;right:auto!important}}'
         . '</style>';
 }, 99);
