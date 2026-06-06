@@ -4,6 +4,12 @@ on:
   push:
     branches: [release/production]
 
+# NOTE: the apex paisabot.com (FTP user u928714162, the main hosting account)
+# is intentionally NOT deployed here — that account's FTP login times out, so
+# this job used to fail on the first step and skip every other site. The apex
+# is deployed via the Hostinger API (hosting_deployWordpressTheme) instead.
+# Only the addon-domain sub-accounts (hi/ml/tel) deploy reliably over FTP.
+
 jobs:
   deploy:
     name: Deploy all production sites
@@ -19,25 +25,25 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: paisabot.com (aivartha)
-        env:
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: python deploy.py paisabot
-
-      - name: hi.paisabot.com (arthanama)
+      # Each site is independent: if: always() keeps one site's failure from
+      # skipping the others, and the job still fails if any site fails.
+      - name: hi.paisabot.com
+        if: ${{ always() }}
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: python deploy.py hi
 
-      - name: ml.paisabot.com (arthanama)
+      - name: ml.paisabot.com
+        if: ${{ always() }}
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: python deploy.py ml
 
-      - name: tel.paisabot.com (arthanama)
+      - name: tel.paisabot.com
+        if: ${{ always() }}
         env:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: python deploy.py tel
 
       - name: Done
-        run: echo "✅ All 4 production sites deployed (commit ${{ github.sha }})"
+        run: echo "✅ Production Indic sites deployed (commit ${{ github.sha }}). Apex paisabot.com deploys via Hostinger API."
