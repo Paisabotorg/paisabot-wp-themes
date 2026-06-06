@@ -1,7 +1,7 @@
 from pathlib import Path
 #!/usr/bin/env python3
 """
-deploy-themes.py — Deploy aivartha/arthanama themes to all Paisabot WP sites via FTP.
+deploy-themes.py — Deploy the paisabot theme to all Paisabot WP sites via FTP.
 
 Usage:
     python3 deploy-themes.py                  # deploy all sites
@@ -21,39 +21,39 @@ import time
 FTP_HOST = "217.21.85.66"
 FTP_PORT = 21
 
-LOCAL_AIVARTHA  = str(Path(__file__).parent / "themes" / "aivartha")
+LOCAL_PAISABOT  = str(Path(__file__).parent / "themes" / "paisabot")
 LOCAL_MU_PLUGIN = str(Path(__file__).parent / "mu-plugins" / "paisabot-activate-theme.php")
 
 SITES = {
     "qa": {
         "label":      "qa.paisabot.com",
         "user":       "u928714162.qa.paisabot.com",
-        "theme_dir":  LOCAL_AIVARTHA,
-        "remote_dir": "wp-content/themes/aivartha",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
     "paisabot": {
         "label":      "paisabot.com",
         "user":       "u928714162",
-        "theme_dir":  LOCAL_AIVARTHA,
-        "remote_dir": "wp-content/themes/aivartha",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
     "hi": {
         "label":      "hi.paisabot.com",
         "user":       "u928714162.hi.paisabot.com",
-        "theme_dir":  LOCAL_AIVARTHA,
-        "remote_dir": "wp-content/themes/aivartha",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
     "ml": {
         "label":      "ml.paisabot.com",
         "user":       "u928714162.ml.paisabot.com",
-        "theme_dir":  LOCAL_AIVARTHA,
-        "remote_dir": "wp-content/themes/aivartha",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
     "tel": {
         "label":      "tel.paisabot.com",
         "user":       "u928714162.tel.paisabot.com",
-        "theme_dir":  LOCAL_AIVARTHA,
-        "remote_dir": "wp-content/themes/aivartha",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
 }
 
@@ -133,7 +133,14 @@ def deploy_site(key, cfg, password):
         except ftplib.error_perm:
             print("  Note: already at public_html root")
 
-        # Ensure mu-plugins dir exists and upload theme-activation plugin
+        # Upload the theme FIRST so the paisabot/ folder exists before the
+        # mu-plugin forces 'paisabot' as the active theme. Doing it the other
+        # way round risks a brief white-screen if the folder isn't there yet.
+        start = time.time()
+        total, failed = upload_dir(ftp, theme_dir, remote_dir)
+        elapsed = time.time() - start
+
+        # Now ensure mu-plugins dir exists and upload theme-activation plugin
         ensure_remote_dir(ftp, "wp-content/mu-plugins")
         try:
             with open(LOCAL_MU_PLUGIN, "rb") as f:
@@ -141,10 +148,6 @@ def deploy_site(key, cfg, password):
             print("  ✓ wp-content/mu-plugins/paisabot-activate-theme.php")
         except Exception as e:
             print(f"  ⚠ mu-plugin upload failed: {e}")
-
-        start = time.time()
-        total, failed = upload_dir(ftp, theme_dir, remote_dir)
-        elapsed = time.time() - start
 
         ftp.quit()
 
