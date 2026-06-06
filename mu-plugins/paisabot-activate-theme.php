@@ -47,6 +47,9 @@ add_action('wp_head', function () {
         . '.art-head-inner{max-width:none!important;margin:0!important}'
         . '.art-body{margin-left:0!important;margin-right:0!important}'
         . '.lb-content{padding-left:24px!important;padding-right:24px!important}'
+        // The ad <aside> also carries class "lb-sponsor"; the sponsor-name rule
+        // leaked display:inline-block onto it and broke full-bleed. Force block.
+        . '.leaderboard-ad.lb-sponsor,.leaderboard-ad.lb-house{display:block!important}'
         . '.leaderboard-ad .ad-tag{right:max(24px,calc(50% - var(--max-w)/2 + 24px))!important}'
         . '@media(max-width:768px){.leaderboard-ad .lb-content{grid-template-columns:1fr!important;gap:16px!important}.leaderboard-ad .lb-cta{width:100%!important;justify-content:center!important}.leaderboard-ad .ad-tag{position:static!important;right:auto!important;top:auto!important;margin:0 20px 8px!important;text-align:right!important}}'
         . '</style>';
