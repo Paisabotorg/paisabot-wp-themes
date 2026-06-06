@@ -48,6 +48,6 @@ add_action('wp_head', function () {
         . '.art-body{margin-left:0!important;margin-right:0!important}'
         . '.lb-content{padding-left:24px!important;padding-right:24px!important}'
         . '.leaderboard-ad .ad-tag{right:max(24px,calc(50% - var(--max-w)/2 + 24px))!important}'
-        . '@media(max-width:768px){.leaderboard-ad .ad-tag{position:static!important;right:auto!important}}'
+        . '@media(max-width:768px){.leaderboard-ad .lb-content{grid-template-columns:1fr!important;gap:16px!important}.leaderboard-ad .lb-cta{width:100%!important;justify-content:center!important}.leaderboard-ad .ad-tag{position:static!important;right:auto!important;top:auto!important;margin:0 20px 8px!important;text-align:right!important}}'
         . '</style>';
 }, 99);
