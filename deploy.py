@@ -165,11 +165,22 @@ def deploy_site(key, cfg, password):
     print(f"  Remote: public_html/{remote_dir}")
     print(f"{'─'*60}")
 
+    # Retry loop: Hostinger FTP sometimes takes >30s to accept connections from
+    # GitHub Actions runners. Two attempts at 60s timeout cover the common case.
+    ftp = None
+    for attempt in range(1, 3):
+        try:
+            ftp = ftplib.FTP()
+            ftp.connect(FTP_HOST, FTP_PORT, timeout=60)
+            ftp.login(user, password)
+            ftp.set_pasv(True)
+            break
+        except Exception as e:
+            print(f"  ⚠ Connect attempt {attempt} failed: {e}")
+            ftp = None
+    if ftp is None:
+        raise RuntimeError(f"Could not connect to FTP after 2 attempts")
     try:
-        ftp = ftplib.FTP()
-        ftp.connect(FTP_HOST, FTP_PORT, timeout=30)
-        ftp.login(user, password)
-        ftp.set_pasv(True)
 
         # Navigate to docroot. Sites using the main FTP account (u928714162)
         # have an explicit base path; subdomain FTP users land directly in docroot.
