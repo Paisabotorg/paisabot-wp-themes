@@ -55,6 +55,50 @@ SITES = {
         "theme_dir":  LOCAL_PAISABOT,
         "remote_dir": "wp-content/themes/paisabot",
     },
+    # ta/mr/gu/kn/bn/or are subdomains of paisabot.com — deploy via main FTP
+    # account with explicit base path (subdomain FTP users don't exist for these).
+    "ta": {
+        "label":      "ta.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/ta",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "mr": {
+        "label":      "mr.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/mr",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "gu": {
+        "label":      "gu.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/gu",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "kn": {
+        "label":      "kn.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/kn",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "bn": {
+        "label":      "bn.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/bn",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "or": {
+        "label":      "or.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/or",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
 }
 
 EXCLUDE_DIRS  = {".git", "__pycache__", "node_modules", ".DS_Store"}
@@ -127,11 +171,17 @@ def deploy_site(key, cfg, password):
         ftp.login(user, password)
         ftp.set_pasv(True)
 
-        # Change into public_html
-        try:
-            ftp.cwd("public_html")
-        except ftplib.error_perm:
-            print("  Note: already at public_html root")
+        # Navigate to docroot. Sites using the main FTP account (u928714162)
+        # have an explicit base path; subdomain FTP users land directly in docroot.
+        base = cfg.get("base", "")
+        if base:
+            ensure_remote_dir(ftp, base)
+            ftp.cwd(base)
+        else:
+            try:
+                ftp.cwd("public_html")
+            except ftplib.error_perm:
+                print("  Note: already at public_html root")
 
         # Upload the theme FIRST so the paisabot/ folder exists before the
         # mu-plugin forces 'paisabot' as the active theme. Doing it the other

@@ -26,6 +26,64 @@ add_action('init', function () {
     remove_post_type_support('page', 'comments');
     remove_post_type_support('page', 'trackbacks');
 });
+// ── One-time menu bootstrap ──────────────────────────────────────────────────
+// Runs once per site after the mu-plugin is deployed. Creates the primary nav
+// menu with category links matching hi/ml/tel, then sets a flag so it never
+// runs again (even if the option is cleared the menu already exists).
+add_action('init', function () {
+    if (get_option('pb_menus_initialized_v2')) return;
+
+    $nav_items = [
+        'banking'        => 'Banking',
+        'economy'        => 'Economy',
+        'foreign-policy' => 'Foreign Policy',
+        'global'         => 'Global',
+        'markets'        => 'Markets',
+        'opinion'        => 'Opinion',
+        'policy'         => 'Policy',
+        'technology'     => 'Technology',
+    ];
+
+    $menu_name = 'Primary Navigation';
+    $existing  = wp_get_nav_menu_object($menu_name);
+    if ($existing) {
+        wp_delete_nav_menu($existing->term_id);
+    }
+    $menu_id = wp_create_nav_menu($menu_name);
+    if (is_wp_error($menu_id)) {
+        return; // bail silently; will retry on next request
+    }
+
+    $order = 1;
+    foreach ($nav_items as $slug => $label) {
+        $cat = get_category_by_slug($slug);
+        if (!$cat) {
+            $cid = wp_create_category($label);
+            $cat = get_category($cid);
+        }
+        if ($cat && !is_wp_error($cat)) {
+            wp_update_nav_menu_item($menu_id, 0, [
+                'menu-item-type'      => 'taxonomy',
+                'menu-item-object'    => 'category',
+                'menu-item-object-id' => $cat->term_id,
+                'menu-item-position'  => $order++,
+                'menu-item-status'    => 'publish',
+                'menu-item-title'     => $label,
+            ]);
+        }
+    }
+
+    // Assign to the theme's 'primary' nav location
+    $locations             = get_theme_mod('nav_menu_locations', []);
+    $locations['primary']  = $menu_id;
+    set_theme_mod('nav_menu_locations', $locations);
+
+    // Homepage should show latest posts, not a static page
+    update_option('show_on_front', 'posts');
+
+    update_option('pb_menus_initialized_v2', true);
+}, 20);
+
 // Remove default widgets that pollute sidebar-1
 add_action('widgets_init', function () {
     unregister_widget('WP_Widget_Recent_Comments');

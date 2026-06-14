@@ -9,4 +9,4 @@ deploy-qa:
 	FTP_PASSWORD=$$FTP_PASSWORD python3 deploy.py qa
 
 deploy-all:
-	FTP_PASSWORD=$$FTP_PASSWORD python3 deploy.py paisabot hi ml tel
+	FTP_PASSWORD=$$FTP_PASSWORD python3 deploy.py paisabot hi ml tel ta mr gu kn bn or
