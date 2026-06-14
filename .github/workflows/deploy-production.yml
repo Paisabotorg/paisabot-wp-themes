@@ -45,5 +45,44 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: python deploy.py tel
 
+      # Extended Indic sites — use main FTP account (u928714162) with base paths.
+      # These were re-created as subdomains of paisabot.com so they share the
+      # main account's FTP credentials (same password as hi/ml/tel).
+      - name: ta.paisabot.com
+        if: ${{ always() }}
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python deploy.py ta
+
+      - name: mr.paisabot.com
+        if: ${{ always() }}
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python deploy.py mr
+
+      - name: gu.paisabot.com
+        if: ${{ always() }}
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python deploy.py gu
+
+      - name: kn.paisabot.com
+        if: ${{ always() }}
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python deploy.py kn
+
+      - name: bn.paisabot.com
+        if: ${{ always() }}
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python deploy.py bn
+
+      - name: or.paisabot.com
+        if: ${{ always() }}
+        env:
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: python deploy.py or
+
       - name: Done
-        run: echo "✅ Production Indic sites deployed (commit ${{ github.sha }}). Apex paisabot.com deploys via Hostinger API."
+        run: echo "✅ All 9 production sites deployed (commit ${{ github.sha }}). Apex paisabot.com deploys via Hostinger API."
