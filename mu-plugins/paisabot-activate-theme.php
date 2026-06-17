@@ -27,11 +27,28 @@ add_action('init', function () {
     remove_post_type_support('page', 'trackbacks');
 });
 // ── One-time menu bootstrap ──────────────────────────────────────────────────
-// Runs once per site after the mu-plugin is deployed. Creates the primary nav
-// menu with category links matching hi/ml/tel, then sets a flag so it never
-// runs again (even if the option is cleared the menu already exists).
+// v3: rebuilds menu on all sites to add "Home" as the first item.
 add_action('init', function () {
-    if (get_option('pb_menus_initialized_v2')) return;
+    if (get_option('pb_menus_initialized_v3')) return;
+
+    $menu_name = 'Primary Navigation';
+    $existing  = wp_get_nav_menu_object($menu_name);
+    if ($existing) {
+        wp_delete_nav_menu($existing->term_id);
+    }
+    $menu_id = wp_create_nav_menu($menu_name);
+    if (is_wp_error($menu_id)) {
+        return;
+    }
+
+    // Home — custom link so it always points to this site's own homepage
+    wp_update_nav_menu_item($menu_id, 0, [
+        'menu-item-type'   => 'custom',
+        'menu-item-url'    => home_url('/'),
+        'menu-item-title'  => 'Home',
+        'menu-item-status' => 'publish',
+        'menu-item-position' => 1,
+    ]);
 
     $nav_items = [
         'banking'        => 'Banking',
@@ -44,17 +61,7 @@ add_action('init', function () {
         'technology'     => 'Technology',
     ];
 
-    $menu_name = 'Primary Navigation';
-    $existing  = wp_get_nav_menu_object($menu_name);
-    if ($existing) {
-        wp_delete_nav_menu($existing->term_id);
-    }
-    $menu_id = wp_create_nav_menu($menu_name);
-    if (is_wp_error($menu_id)) {
-        return; // bail silently; will retry on next request
-    }
-
-    $order = 1;
+    $order = 2;
     foreach ($nav_items as $slug => $label) {
         $cat = get_category_by_slug($slug);
         if (!$cat) {
@@ -73,16 +80,23 @@ add_action('init', function () {
         }
     }
 
-    // Assign to the theme's 'primary' nav location
-    $locations             = get_theme_mod('nav_menu_locations', []);
-    $locations['primary']  = $menu_id;
+    $locations            = get_theme_mod('nav_menu_locations', []);
+    $locations['primary'] = $menu_id;
     set_theme_mod('nav_menu_locations', $locations);
 
-    // Homepage should show latest posts, not a static page
     update_option('show_on_front', 'posts');
-
-    update_option('pb_menus_initialized_v2', true);
+    update_option('pb_menus_initialized_v3', true);
 }, 20);
+
+// ── One-time cleanup: trash the /subscribe/ page if it exists ────────────────
+add_action('init', function () {
+    if (get_option('pb_subscribe_page_removed')) return;
+    $page = get_page_by_path('subscribe');
+    if ($page) {
+        wp_trash_post($page->ID);
+    }
+    update_option('pb_subscribe_page_removed', true);
+}, 25);
 
 // Remove default widgets that pollute sidebar-1
 add_action('widgets_init', function () {
