@@ -88,6 +88,21 @@ add_action('init', function () {
     update_option('pb_menus_initialized_v3', true);
 }, 20);
 
+// ── Bridge: rewrite stale auth URLs in cached header.php output ──────────────
+// header.php is stuck behind PHP OPcache on some sites (FTP upload doesn't
+// invalidate compiled bytecode). The real fix is in header.php; this is a
+// bridge until OPcache naturally recompiles it. Safe to remove once confirmed
+// every site serves the corrected /login and /logout links directly.
+add_action('template_redirect', function () {
+    ob_start(function ($html) {
+        return str_replace(
+            ['auth.paisabot.com/auth/google', 'auth.paisabot.com/auth/logout'],
+            ['auth.paisabot.com/login',        'auth.paisabot.com/logout'],
+            $html
+        );
+    });
+}, 1);
+
 // ── One-time cleanup: trash the /subscribe/ page if it exists ────────────────
 add_action('init', function () {
     if (get_option('pb_subscribe_page_removed')) return;

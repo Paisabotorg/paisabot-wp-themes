@@ -34,6 +34,9 @@ SITES = {
     "paisabot": {
         "label":      "paisabot.com",
         "user":       "u928714162",
+        # Main account lands in its home dir where `cwd public_html` fails
+        # silently; the real apex docroot (per auth RUNBOOK) is:
+        "base":       "domains/paisabot.com/public_html",
         "theme_dir":  LOCAL_PAISABOT,
         "remote_dir": "wp-content/themes/paisabot",
     },

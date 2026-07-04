@@ -105,7 +105,7 @@
     var signOutBtn = document.getElementById('pd-signout');
     if (signOutBtn) {
       signOutBtn.addEventListener('click', function () {
-        fetch('https://auth.paisabot.com/auth/logout', {
+        fetch('https://auth.paisabot.com/logout', {
           method: 'POST', credentials: 'include',
         }).finally(function () {
           window.location.reload();
