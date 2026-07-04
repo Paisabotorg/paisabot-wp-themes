@@ -2,13 +2,15 @@
 /**
  * Template Name: Stock Analysis
  *
- * Individual stock analysis page.
- * URL: /stock-analysis/?ticker=RELIANCE
+ * Redirects to the standalone analyse.paisabot.com app.
+ * Preserves ?ticker=SYMBOL if present in the URL.
  */
 defined('ABSPATH') || exit;
 
-$ticker = strtoupper(sanitize_text_field($_GET['ticker'] ?? 'RELIANCE'));
-$stock  = aiv_get_stock_data($ticker);
+$ticker = strtoupper(sanitize_text_field($_GET['ticker'] ?? ''));
+$dest   = 'https://analyse.paisabot.com/' . ($ticker ? '?ticker=' . rawurlencode($ticker) : '');
+wp_redirect($dest, 301);
+exit;
 
 get_header();
 ?>

@@ -67,6 +67,7 @@
     <div class="archive-pagination">
       <?php
       echo paginate_links([
+        'base'      => str_replace(999999999, '%#%', esc_url(get_pagenum_link(999999999))),
         'total'     => $wp_query->max_num_pages,
         'current'   => max(1, get_query_var('paged')),
         'mid_size'  => 2,

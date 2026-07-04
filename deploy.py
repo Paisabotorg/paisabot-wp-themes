@@ -1,7 +1,7 @@
 from pathlib import Path
 #!/usr/bin/env python3
 """
-deploy-themes.py — Deploy aivartha/arthanama themes to all Paisabot WP sites via FTP.
+deploy-themes.py — Deploy the paisabot theme to all Paisabot WP sites via FTP.
 
 Usage:
     python3 deploy-themes.py                  # deploy all sites
@@ -21,39 +21,86 @@ import time
 FTP_HOST = "217.21.85.66"
 FTP_PORT = 21
 
-LOCAL_AIVARTHA  = str(Path(__file__).parent / "themes" / "aivartha")
-LOCAL_ARTHANAMA = str(Path(__file__).parent / "themes" / "arthanama")
+LOCAL_PAISABOT  = str(Path(__file__).parent / "themes" / "paisabot")
+LOCAL_MU_PLUGIN = str(Path(__file__).parent / "mu-plugins" / "paisabot-activate-theme.php")
 
 SITES = {
     "qa": {
         "label":      "qa.paisabot.com",
         "user":       "u928714162.qa.paisabot.com",
-        "theme_dir":  LOCAL_AIVARTHA,
-        "remote_dir": "wp-content/themes/aivartha",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
     "paisabot": {
         "label":      "paisabot.com",
         "user":       "u928714162",
-        "theme_dir":  LOCAL_AIVARTHA,
-        "remote_dir": "wp-content/themes/aivartha",
+        # Main account lands in its home dir where `cwd public_html` fails
+        # silently; the real apex docroot (per auth RUNBOOK) is:
+        "base":       "domains/paisabot.com/public_html",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
     "hi": {
         "label":      "hi.paisabot.com",
         "user":       "u928714162.hi.paisabot.com",
-        "theme_dir":  LOCAL_ARTHANAMA,
-        "remote_dir": "wp-content/themes/arthanama",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
     "ml": {
         "label":      "ml.paisabot.com",
         "user":       "u928714162.ml.paisabot.com",
-        "theme_dir":  LOCAL_ARTHANAMA,
-        "remote_dir": "wp-content/themes/arthanama",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
     "tel": {
         "label":      "tel.paisabot.com",
         "user":       "u928714162.tel.paisabot.com",
-        "theme_dir":  LOCAL_ARTHANAMA,
-        "remote_dir": "wp-content/themes/arthanama",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    # ta/mr/gu/kn/bn/or are subdomains of paisabot.com — deploy via main FTP
+    # account with explicit base path (subdomain FTP users don't exist for these).
+    "ta": {
+        "label":      "ta.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/ta",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "mr": {
+        "label":      "mr.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/mr",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "gu": {
+        "label":      "gu.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/gu",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "kn": {
+        "label":      "kn.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/kn",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "bn": {
+        "label":      "bn.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/bn",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
+    },
+    "or": {
+        "label":      "or.paisabot.com",
+        "user":       "u928714162",
+        "base":       "domains/paisabot.com/public_html/or",
+        "theme_dir":  LOCAL_PAISABOT,
+        "remote_dir": "wp-content/themes/paisabot",
     },
 }
 
@@ -121,21 +168,50 @@ def deploy_site(key, cfg, password):
     print(f"  Remote: public_html/{remote_dir}")
     print(f"{'─'*60}")
 
-    try:
-        ftp = ftplib.FTP()
-        ftp.connect(FTP_HOST, FTP_PORT, timeout=30)
-        ftp.login(user, password)
-        ftp.set_pasv(True)
-
-        # Change into public_html
+    # Retry loop: Hostinger FTP sometimes takes >30s to accept connections from
+    # GitHub Actions runners. Two attempts at 60s timeout cover the common case.
+    ftp = None
+    for attempt in range(1, 3):
         try:
-            ftp.cwd("public_html")
-        except ftplib.error_perm:
-            print("  Note: already at public_html root")
+            ftp = ftplib.FTP()
+            ftp.connect(FTP_HOST, FTP_PORT, timeout=60)
+            ftp.login(user, password)
+            ftp.set_pasv(True)
+            break
+        except Exception as e:
+            print(f"  ⚠ Connect attempt {attempt} failed: {e}")
+            ftp = None
+    if ftp is None:
+        raise RuntimeError(f"Could not connect to FTP after 2 attempts")
+    try:
 
+        # Navigate to docroot. Sites using the main FTP account (u928714162)
+        # have an explicit base path; subdomain FTP users land directly in docroot.
+        base = cfg.get("base", "")
+        if base:
+            ensure_remote_dir(ftp, base)
+            ftp.cwd(base)
+        else:
+            try:
+                ftp.cwd("public_html")
+            except ftplib.error_perm:
+                print("  Note: already at public_html root")
+
+        # Upload the theme FIRST so the paisabot/ folder exists before the
+        # mu-plugin forces 'paisabot' as the active theme. Doing it the other
+        # way round risks a brief white-screen if the folder isn't there yet.
         start = time.time()
         total, failed = upload_dir(ftp, theme_dir, remote_dir)
         elapsed = time.time() - start
+
+        # Now ensure mu-plugins dir exists and upload theme-activation plugin
+        ensure_remote_dir(ftp, "wp-content/mu-plugins")
+        try:
+            with open(LOCAL_MU_PLUGIN, "rb") as f:
+                ftp.storbinary("STOR wp-content/mu-plugins/paisabot-activate-theme.php", f)
+            print("  ✓ wp-content/mu-plugins/paisabot-activate-theme.php")
+        except Exception as e:
+            print(f"  ⚠ mu-plugin upload failed: {e}")
 
         ftp.quit()
 

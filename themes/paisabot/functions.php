@@ -145,9 +145,10 @@ function aivartha_font_url(): string {
 }
 
 function aivartha_enqueue() {
-    wp_enqueue_style('aivartha-fonts', aivartha_font_url(), [], null);
-    wp_enqueue_style('aivartha-style', get_stylesheet_uri(), ['aivartha-fonts'], '3.3.0');
-    wp_enqueue_script('aivartha-js', get_template_directory_uri() . '/assets/js/main.js', [], '3.3.0', true);
+    $ver = wp_get_theme()->get('Version');
+    wp_enqueue_style('paisabot-fonts', aivartha_font_url(), [], null);
+    wp_enqueue_style('paisabot-style', get_stylesheet_uri(), ['paisabot-fonts'], $ver);
+    wp_enqueue_script('paisabot-js', get_template_directory_uri() . '/assets/js/main.js', [], $ver, true);
     if (is_singular()) wp_enqueue_script('comment-reply');
 }
 add_action('wp_enqueue_scripts', 'aivartha_enqueue');
@@ -169,12 +170,15 @@ function aivartha_widgets() {
 
     // Ad zones — empty wrappers; paste your GAM/AdSense code via Appearance > Widgets
     $ads = [
-        ['ad-leaderboard', __('Ad — Leaderboard (homepage, below hero)',  'aivartha')],
-        ['ad-mpu',         __('Ad — MPU 300×250 (in briefing sidebar)',   'aivartha')],
-        ['ad-native',      __('Ad — Native / Sponsored card',             'aivartha')],
-        ['ad-skyscraper',  __('Ad — Skyscraper 160×600 (article sidebar)','aivartha')],
-        ['ad-sticky',      __('Ad — Sticky footer bar',                   'aivartha')],
-        ['ad-in-article',  __('Ad — In-article (after 3rd paragraph)',    'aivartha')],
+        ['ad-leaderboard',             __('Ad — Leaderboard (below front-page hero)',         'paisabot')],
+        ['ad-leaderboard-pulse',       __('Ad — Wide sponsor (between Markets Pulse & Briefing)', 'paisabot')],
+        ['ad-leaderboard-voices-top',  __('Ad — Wide sponsor (above Voices)',                  'paisabot')],
+        ['ad-leaderboard-voices',      __('Ad — Wide sponsor (below Voices)',                  'paisabot')],
+        ['ad-mpu',                     __('Ad — MPU 300×250 (in briefing sidebar)',           'paisabot')],
+        ['ad-native',                  __('Ad — Native / Sponsored card',                      'paisabot')],
+        ['ad-skyscraper',              __('Ad — Skyscraper 160×600 (article sidebar)',        'paisabot')],
+        ['ad-sticky',                  __('Ad — Sticky footer bar',                            'paisabot')],
+        ['ad-in-article',              __('Ad — In-article (after 3rd paragraph)',            'paisabot')],
     ];
     foreach ($ads as [$id, $name]) {
         register_sidebar([
