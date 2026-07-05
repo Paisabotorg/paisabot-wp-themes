@@ -22,7 +22,7 @@ FTP_HOST = "217.21.85.66"
 FTP_PORT = 21
 
 LOCAL_PAISABOT  = str(Path(__file__).parent / "themes" / "paisabot")
-LOCAL_MU_PLUGIN = str(Path(__file__).parent / "mu-plugins" / "paisabot-activate-theme.php")
+LOCAL_MU_DIR    = Path(__file__).parent / "mu-plugins"
 
 SITES = {
     "qa": {
@@ -204,14 +204,15 @@ def deploy_site(key, cfg, password):
         total, failed = upload_dir(ftp, theme_dir, remote_dir)
         elapsed = time.time() - start
 
-        # Now ensure mu-plugins dir exists and upload theme-activation plugin
+        # Now ensure mu-plugins dir exists and upload every mu-plugin
         ensure_remote_dir(ftp, "wp-content/mu-plugins")
-        try:
-            with open(LOCAL_MU_PLUGIN, "rb") as f:
-                ftp.storbinary("STOR wp-content/mu-plugins/paisabot-activate-theme.php", f)
-            print("  ✓ wp-content/mu-plugins/paisabot-activate-theme.php")
-        except Exception as e:
-            print(f"  ⚠ mu-plugin upload failed: {e}")
+        for muf in sorted(LOCAL_MU_DIR.glob("*.php")):
+            try:
+                with open(muf, "rb") as f:
+                    ftp.storbinary(f"STOR wp-content/mu-plugins/{muf.name}", f)
+                print(f"  ✓ wp-content/mu-plugins/{muf.name}")
+            except Exception as e:
+                print(f"  ⚠ mu-plugin {muf.name} upload failed: {e}")
 
         ftp.quit()
 
