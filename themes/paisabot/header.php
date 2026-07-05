@@ -96,15 +96,13 @@
         <?php
           $aiv_nav = [
             'home'           => ['label'=>'Home',           'url'=>home_url('/')],
-            'markets'        => ['label'=>'Markets',        'url'=>'https://markets.paisabot.com', 'external'=>true],
+            'indian-markets' => ['label'=>'Indian Markets', 'url'=>aiv_cat_url('indian-markets')],
+            'global-markets' => ['label'=>'Global Markets', 'url'=>aiv_cat_url('global-markets')],
             'stocks'         => ['label'=>'Stocks',         'url'=>'https://analyse.paisabot.com', 'external'=>true],
-            'policy'         => ['label'=>'Policy',         'url'=>aiv_cat_url('policy')],
-            'banking'        => ['label'=>'Banking',        'url'=>aiv_cat_url('banking')],
-            'economy'        => ['label'=>'Economy',        'url'=>aiv_cat_url('economy')],
-            'global'         => ['label'=>'Global',         'url'=>aiv_cat_url('global')],
-            'foreign-policy' => ['label'=>'Foreign Policy', 'url'=>aiv_cat_url('foreign-policy')],
+            'news'           => ['label'=>'News',           'url'=>aiv_cat_url('news')],
             'technology'     => ['label'=>'Technology',     'url'=>aiv_cat_url('technology')],
             'opinion'        => ['label'=>'Opinion',        'url'=>aiv_cat_url('opinion')],
+            'history'        => ['label'=>'History',        'url'=>aiv_cat_url('history')],
           ];
           echo '<ul class="nav-list">';
           foreach ($aiv_nav as $slug => $item) {
@@ -204,15 +202,13 @@
   <nav class="mnd-nav">
     <ul class="mnd-list">
       <li><a href="<?php echo esc_url(home_url('/')); ?>"><?php echo aiv_icon('i-home'); ?> Home</a></li>
-      <li><a href="https://markets.paisabot.com" target="_blank" rel="noopener noreferrer"><?php echo aiv_icon('i-trend-up'); ?> Markets</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('indian-markets')); ?>"><?php echo aiv_icon('i-trend-up'); ?> Indian Markets</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('global-markets')); ?>"><?php echo aiv_icon('i-trend-up'); ?> Global Markets</a></li>
       <li><a href="https://analyse.paisabot.com" target="_blank" rel="noopener noreferrer"><?php echo aiv_icon('i-trend-up'); ?> Stocks</a></li>
-      <li><a href="<?php echo esc_url(aiv_cat_url('policy')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Policy</a></li>
-      <li><a href="<?php echo esc_url(aiv_cat_url('banking')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Banking</a></li>
-      <li><a href="<?php echo esc_url(aiv_cat_url('economy')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Economy</a></li>
-      <li><a href="<?php echo esc_url(aiv_cat_url('global')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Global</a></li>
-      <li><a href="<?php echo esc_url(aiv_cat_url('foreign-policy')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Foreign Policy</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('news')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> News</a></li>
       <li><a href="<?php echo esc_url(aiv_cat_url('technology')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Technology</a></li>
       <li><a href="<?php echo esc_url(aiv_cat_url('opinion')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Opinion</a></li>
+      <li><a href="<?php echo esc_url(aiv_cat_url('history')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> History</a></li>
     </ul>
   </nav>
   <div class="mnd-footer">
