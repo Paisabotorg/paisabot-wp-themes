@@ -11,6 +11,7 @@ Sites: qa, paisabot, hi, ml, tel
 """
 
 import ftplib
+import io
 import os
 import sys
 import getpass
@@ -121,8 +122,23 @@ def ensure_remote_dir(ftp, path):
             if "550" not in str(e):  # 550 = already exists, ignore
                 raise
 
+def _minify(local_path, data):
+    """Minify CSS/JS in-flight so the shipped assets are small while repo
+    sources stay readable. No-op if the minifiers aren't installed."""
+    try:
+        if local_path.endswith(".css"):
+            import rcssmin
+            return rcssmin.cssmin(data)
+        if local_path.endswith(".js") and not local_path.endswith(".min.js"):
+            import rjsmin
+            return rjsmin.jsmin(data)
+    except Exception as e:                       # noqa: BLE001
+        print(f"    (minify skipped for {os.path.basename(local_path)}: {e})")
+    return data
+
+
 def upload_dir(ftp, local_dir, remote_dir):
-    """Recursively upload local_dir to remote_dir."""
+    """Recursively upload local_dir to remote_dir (CSS/JS minified in-flight)."""
     total = 0
     failed = []
 
@@ -147,7 +163,13 @@ def upload_dir(ftp, local_dir, remote_dir):
 
             try:
                 with open(local_path, "rb") as f:
-                    ftp.storbinary(f"STOR {remote_path}", f)
+                    data = f.read()
+                if filename.endswith((".css", ".js")):
+                    small = _minify(local_path, data)
+                    if len(small) < len(data):
+                        print(f"    minified {filename}: {len(data)//1024}K → {len(small)//1024}K")
+                        data = small
+                ftp.storbinary(f"STOR {remote_path}", io.BytesIO(data))
                 total += 1
                 print(f"  ✓ {remote_path}")
             except Exception as e:

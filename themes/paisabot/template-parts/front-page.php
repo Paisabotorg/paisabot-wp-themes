@@ -27,7 +27,11 @@ $mid_cat = $mid ? (get_the_category($mid->ID)[0] ?? null) : null;
     <a class="fp-lead" href="<?php echo esc_url(get_permalink($top)); ?>">
       <div class="fp-image">
         <?php if (has_post_thumbnail($top)):
-          echo get_the_post_thumbnail($top, 'aiv-hero', ['alt' => get_the_title($top), 'loading' => 'eager']);
+          // LCP element: eager + high priority, never lazy.
+          echo get_the_post_thumbnail($top, 'aiv-hero', [
+            'alt' => get_the_title($top), 'loading' => 'eager',
+            'fetchpriority' => 'high', 'decoding' => 'async',
+          ]);
         else: ?>
           <div class="card-img-placeholder">
             <svg viewBox="0 0 40 40" width="60" height="60" style="opacity:.2">
