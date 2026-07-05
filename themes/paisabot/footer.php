@@ -24,8 +24,10 @@
         <div>
           <p class="footer-col-title">Sections</p>
           <nav class="footer-links">
+            <a href="https://markets.paisabot.com"><?php echo aiv_icon('i-arrow-r'); ?> Markets</a>
+            <a href="https://analyse.paisabot.com"><?php echo aiv_icon('i-arrow-r'); ?> Stocks</a>
             <?php
-            foreach (['Markets','Policy','Banking','Economy','Global','Foreign Policy','Technology','Opinion'] as $name):
+            foreach (['Policy','Banking','Economy','Global','Foreign Policy','Technology','Opinion'] as $name):
               $cat = get_category_by_slug(sanitize_title($name));
               $url = $cat ? get_category_link($cat->term_id) : home_url('/category/' . sanitize_title($name));
             ?>
@@ -38,22 +40,19 @@
           <p class="footer-col-title">Products</p>
           <nav class="footer-links">
             <a href="<?php echo esc_url(home_url('/subscribe')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Newsletter</a>
-            <a href="<?php echo esc_url(home_url('/markets-pro')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Markets Pro</a>
-            <a href="<?php echo esc_url(home_url('/stock-analysis')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Stock Analysis</a>
+            <a href="https://markets.paisabot.com"><?php echo aiv_icon('i-arrow-r'); ?> Markets Dashboard</a>
+            <a href="https://analyse.paisabot.com"><?php echo aiv_icon('i-arrow-r'); ?> Stock Analysis</a>
           </nav>
         </div>
 
         <div>
           <p class="footer-col-title">About</p>
           <nav class="footer-links">
-            <?php if (is_active_sidebar('footer-4')): dynamic_sidebar('footer-4');
-            else: ?>
-            <a href="<?php echo esc_url(home_url('/about')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> About AI Vartha</a>
+            <a href="<?php echo esc_url(home_url('/about')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> About PaisaBot</a>
             <a href="<?php echo esc_url(home_url('/editorial-policy')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Editorial Policy</a>
             <a href="<?php echo esc_url(home_url('/contact')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Contact</a>
             <a href="<?php echo esc_url(home_url('/privacy-policy')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Privacy Policy</a>
             <a href="<?php echo esc_url(home_url('/disclaimer')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Disclaimer</a>
-            <?php endif; ?>
           </nav>
         </div>
 
@@ -62,7 +61,7 @@
   </div>
   <div class="footer-bottom">
     <div class="wrap">
-      <span>&copy; <?php echo date('Y'); ?> <a href="<?php echo esc_url(home_url('/')); ?>"><?php bloginfo('name'); ?></a>. All rights reserved.</span>
+      <span>&copy; <?php echo date('Y'); ?> <a href="https://www.paisabot.com/">PaisaBot</a>. All rights reserved.</span>
       <span>Available in
         <span style="color:var(--amber-2);font-weight:700">EN · ML · HI · TE</span>
         · Powered by IndicTrans2
