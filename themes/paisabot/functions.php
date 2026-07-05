@@ -147,11 +147,24 @@ function aivartha_font_url(): string {
 function aivartha_enqueue() {
     $ver = wp_get_theme()->get('Version');
     wp_enqueue_style('paisabot-fonts', aivartha_font_url(), [], null);
-    wp_enqueue_style('paisabot-style', get_stylesheet_uri(), ['paisabot-fonts'], $ver);
+    // style.css no longer waits on the external font CSS → first paint isn't
+    // gated on a Google Fonts round-trip (the LCP/FCP bottleneck).
+    wp_enqueue_style('paisabot-style', get_stylesheet_uri(), [], $ver);
     wp_enqueue_script('paisabot-js', get_template_directory_uri() . '/assets/js/main.js', [], $ver, true);
     if (is_singular()) wp_enqueue_script('comment-reply');
 }
 add_action('wp_enqueue_scripts', 'aivartha_enqueue');
+
+// Load Google Fonts non-render-blocking (media=print → swap to all onload) so
+// first paint doesn't block on the external font stylesheet. display=swap
+// already renders text in the fallback face immediately, then swaps in.
+add_filter('style_loader_tag', function ($tag, $handle) {
+    if ($handle !== 'paisabot-fonts') return $tag;
+    $out = preg_replace('/\smedia=([\'"])all\1/', ' media="print" onload="this.media=\'all\'"', $tag);
+    // <noscript> fallback for JS-disabled clients
+    $noscript = '<noscript>' . preg_replace('/\smedia=([\'"])all\1/', '', $tag) . '</noscript>';
+    return $out . $noscript;
+}, 10, 2);
 
 /* ════════════════════════════════════════════════════════════════════════
    WIDGET AREAS

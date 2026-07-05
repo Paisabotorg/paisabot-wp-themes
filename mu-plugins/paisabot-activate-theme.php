@@ -27,7 +27,8 @@ add_action('init', function () {
     remove_post_type_support('page', 'trackbacks');
 });
 // ── One-time menu bootstrap ──────────────────────────────────────────────────
-// v3: rebuilds menu on all sites to add "Home" as the first item.
+// NOTE: the visible primary nav is defined in header.php ($aiv_nav) — this WP
+// menu is not used by the theme. Kept inert (v3 already set on all sites).
 add_action('init', function () {
     if (get_option('pb_menus_initialized_v3')) return;
 
@@ -65,8 +66,12 @@ add_action('init', function () {
     foreach ($nav_items as $slug => $label) {
         $cat = get_category_by_slug($slug);
         if (!$cat) {
-            $cid = wp_create_category($label);
-            $cat = get_category($cid);
+            // wp_create_category() lives in wp-admin and is undefined on the
+            // frontend (fatal during `init`). wp_insert_term() is core and safe.
+            $term = wp_insert_term($label, 'category', ['slug' => $slug]);
+            if (!is_wp_error($term) && !empty($term['term_id'])) {
+                $cat = get_category($term['term_id']);
+            }
         }
         if ($cat && !is_wp_error($cat)) {
             wp_update_nav_menu_item($menu_id, 0, [
