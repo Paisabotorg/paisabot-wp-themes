@@ -126,7 +126,9 @@ add_action('after_setup_theme', 'aivartha_setup');
 function aivartha_font_url(): string {
     $script = get_option('aivartha_script', '');
     $locale = get_locale();
-    $g = 'Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500;600';
+    // Trimmed weights + dropped the Source Serif optical-size axis: ~377KB → ~155KB
+    // of fonts, the main LCP lever (the hero headline was blocked on the font swap).
+    $g = 'Inter:wght@400;600;700;800&family=Source+Serif+4:wght@400;600;700&family=JetBrains+Mono:wght@400';
 
     if ($script === 'malayalam' || str_starts_with($locale, 'ml')) {
         $g .= '&family=Noto+Sans+Malayalam:wght@400;500;600;700;800';
