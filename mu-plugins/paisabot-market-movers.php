@@ -95,12 +95,13 @@ add_filter('aiv_stock_list', function ($fallback) {
     ], $items);
 });
 
-// ── Homepage "Key Indices" → live macro tiles ────────────────────────────────
+// ── Homepage "Key Indices" → live macro tiles (exclude sector rows) ───────────
 add_filter('aiv_pulse_indices', function ($fallback) {
     $d = pb_mm_get('/indices');
     if (!$d || empty($d['items'])) return $fallback;
     $out = [];
     foreach ($d['items'] as $i) {
+        if (($i['grp'] ?? '') === 'sector') continue;   // sectors → heatmap, not tiles
         $out[] = [
             'name'  => $i['name'],
             'value' => $i['value'],
@@ -108,7 +109,24 @@ add_filter('aiv_pulse_indices', function ($fallback) {
             'up'    => (bool) $i['is_up'],
         ];
     }
-    return $out;
+    return $out ?: $fallback;
+});
+
+// ── Homepage "Markets Pulse" sector heatmap → live NSE sector indices ─────────
+add_filter('aiv_heatmap', function ($fallback) {
+    $d = pb_mm_get('/indices');
+    if (!$d || empty($d['items'])) return $fallback;
+    $sectors = array_values(array_filter($d['items'], fn($i) => ($i['grp'] ?? '') === 'sector'));
+    if (!$sectors) return $fallback;
+    return array_map(function ($i, $n) {
+        $cell = [
+            'name' => $i['name'],
+            'pct'  => $i['pct_change'],
+            'up'   => (bool) $i['is_up'],
+        ];
+        if ($n === 0) { $cell['large'] = true; $cell['sub'] = $i['name'] . ' · ' . $i['value']; }
+        return $cell;
+    }, $sectors, array_keys($sectors));
 });
 
 // ── Freshness note: inject "As of HH:MM IST" (+ Delayed badge) after the
