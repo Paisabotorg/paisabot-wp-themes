@@ -5,7 +5,10 @@
  */
 get_header();
 
-if (is_home() && !is_paged()):
+// News menu → all posts across every category (skip the editorial front).
+$pb_news = isset($_GET['pb_view']) && $_GET['pb_view'] === 'news';
+
+if (is_home() && !is_paged() && !$pb_news):
     // ── EDITORIAL HOMEPAGE ──────────────────────────────────────────────
     get_template_part('template-parts/front-page');
     get_template_part('template-parts/ads/leaderboard');
@@ -59,7 +62,11 @@ else:
     <div class="home-grid">
       <div>
 
-        <?php if (is_category()): ?>
+        <?php if ($pb_news): ?>
+        <div class="sec-hd">
+          <span class="sec-title sec-title-large">Latest News</span>
+        </div>
+        <?php elseif (is_category()): ?>
         <div class="sec-hd">
           <span class="sec-title sec-title-large"><?php single_cat_title(); ?></span>
         </div>

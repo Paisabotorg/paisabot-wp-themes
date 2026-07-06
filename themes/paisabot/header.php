@@ -96,10 +96,10 @@
         <?php
           $aiv_nav = [
             'home'           => ['label'=>'Home',           'url'=>home_url('/')],
-            'indian-markets' => ['label'=>'Indian Markets', 'url'=>aiv_cat_url('indian-markets')],
-            'global-markets' => ['label'=>'Global Markets', 'url'=>aiv_cat_url('global-markets')],
+            'indian-markets' => ['label'=>'Indian Markets', 'url'=>'https://markets.paisabot.com/?view=indian', 'external'=>true],
+            'global-markets' => ['label'=>'Global Markets', 'url'=>'https://markets.paisabot.com/?view=global', 'external'=>true],
             'stocks'         => ['label'=>'Stocks',         'url'=>'https://analyse.paisabot.com', 'external'=>true],
-            'news'           => ['label'=>'News',           'url'=>aiv_cat_url('news')],
+            'news'           => ['label'=>'News',           'url'=>home_url('/?pb_view=news')],
             'technology'     => ['label'=>'Technology',     'url'=>aiv_cat_url('technology')],
             'opinion'        => ['label'=>'Opinion',        'url'=>aiv_cat_url('opinion')],
             'history'        => ['label'=>'History',        'url'=>aiv_cat_url('history')],
@@ -202,10 +202,10 @@
   <nav class="mnd-nav">
     <ul class="mnd-list">
       <li><a href="<?php echo esc_url(home_url('/')); ?>"><?php echo aiv_icon('i-home'); ?> Home</a></li>
-      <li><a href="<?php echo esc_url(aiv_cat_url('indian-markets')); ?>"><?php echo aiv_icon('i-trend-up'); ?> Indian Markets</a></li>
-      <li><a href="<?php echo esc_url(aiv_cat_url('global-markets')); ?>"><?php echo aiv_icon('i-trend-up'); ?> Global Markets</a></li>
+      <li><a href="https://markets.paisabot.com/?view=indian" target="_blank" rel="noopener noreferrer"><?php echo aiv_icon('i-trend-up'); ?> Indian Markets</a></li>
+      <li><a href="https://markets.paisabot.com/?view=global" target="_blank" rel="noopener noreferrer"><?php echo aiv_icon('i-trend-up'); ?> Global Markets</a></li>
       <li><a href="https://analyse.paisabot.com" target="_blank" rel="noopener noreferrer"><?php echo aiv_icon('i-trend-up'); ?> Stocks</a></li>
-      <li><a href="<?php echo esc_url(aiv_cat_url('news')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> News</a></li>
+      <li><a href="<?php echo esc_url(home_url('/?pb_view=news')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> News</a></li>
       <li><a href="<?php echo esc_url(aiv_cat_url('technology')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Technology</a></li>
       <li><a href="<?php echo esc_url(aiv_cat_url('opinion')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> Opinion</a></li>
       <li><a href="<?php echo esc_url(aiv_cat_url('history')); ?>"><?php echo aiv_icon('i-arrow-r'); ?> History</a></li>
