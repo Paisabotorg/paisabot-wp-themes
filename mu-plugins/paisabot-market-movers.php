@@ -112,6 +112,19 @@ add_filter('aiv_pulse_indices', function ($fallback) {
     return $out ?: $fallback;
 });
 
+// ── Top-bar ticker/scroller → live macro indices (% only; header drops price) ─
+add_filter('aiv_market_items', function ($fallback) {
+    $d = pb_mm_get('/indices');
+    if (!$d || empty($d['items'])) return $fallback;
+    $out = [];
+    foreach ($d['items'] as $i) {
+        if (($i['grp'] ?? '') === 'sector') continue;   // macro indices only
+        $out[] = ['n' => $i['name'], 'p' => $i['value'],
+                  'c' => $i['pct_change'], 'up' => (bool) $i['is_up']];
+    }
+    return $out ?: $fallback;
+});
+
 // ── Homepage "Markets Pulse" sector heatmap → live NSE sector indices ─────────
 add_filter('aiv_heatmap', function ($fallback) {
     $d = pb_mm_get('/indices');

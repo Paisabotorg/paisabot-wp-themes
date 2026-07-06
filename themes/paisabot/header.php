@@ -59,7 +59,6 @@
       <?php foreach (array_merge(aiv_market_items(), aiv_market_items()) as $m): ?>
       <div class="ticker-item">
         <span class="t-name"><?php echo esc_html($m['n']); ?></span>
-        <span class="t-price"><?php echo esc_html($m['p']); ?></span>
         <span class="<?php echo $m['up'] ? 't-up' : 't-dn'; ?>">
           <?php echo aiv_icon($m['up'] ? 'i-trend-up' : 'i-trend-dn'); ?>
           <?php echo esc_html($m['c']); ?>
