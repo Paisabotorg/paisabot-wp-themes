@@ -172,6 +172,24 @@ function pb_seo_head(): void {
     echo "<!-- /PaisaBot SEO -->\n";
 }
 
+/* ── Legacy sitemap paths → WP core sitemap (tools probe the Yoast path
+      and currently pull a ~75 KB themed 404) ──────────────────────────── */
+add_action('template_redirect', function () {
+    $path = wp_parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+    if (in_array($path, ['/sitemap.xml', '/sitemap_index.xml'], true)) {
+        wp_redirect(home_url('/wp-sitemap.xml'), 301);
+        exit;
+    }
+});
+
+/* ── robots.txt: point crawlers at the sitemap ─────────────────────── */
+add_filter('robots_txt', function ($output) {
+    if (strpos($output, 'Sitemap:') === false) {
+        $output .= "\nSitemap: " . home_url('/wp-sitemap.xml') . "\n";
+    }
+    return $output;
+}, 20);
+
 /* ── Title: make sure the brand, not the edition name, suffixes titles ── */
 add_filter('document_title_parts', function ($parts) {
     if (pb_seo_plugin_active()) return $parts;
