@@ -25,6 +25,31 @@ function pb_seo_plugin_active(): bool {
 remove_action('wp_head', 'wp_generator');
 add_filter('the_generator', '__return_empty_string');
 
+/* ── _pb_hreflang post meta: the pipeline writes each article's
+      translated-sibling map ({"en":url,"hi":url,…}) over REST ─────────── */
+add_action('init', function () {
+    register_post_meta('post', '_pb_hreflang', [
+        'type'          => 'string',
+        'single'        => true,
+        'show_in_rest'  => true,
+        'auth_callback' => function ($allowed, $meta_key, $post_id) {
+            return current_user_can('edit_post', $post_id);
+        },
+        'sanitize_callback' => function ($value) {
+            $map = json_decode((string) $value, true);
+            if (!is_array($map)) return '';
+            $clean = [];
+            foreach ($map as $code => $href) {
+                if (preg_match('/^[a-z]{2}$/', (string) $code)
+                    && preg_match('#^https://([a-z]+\.)?paisabot\.com/#', (string) $href)) {
+                    $clean[$code] = esc_url_raw($href);
+                }
+            }
+            return $clean ? wp_json_encode($clean) : '';
+        },
+    ]);
+});
+
 /* ── Edition map (hreflang cluster for homepages/sections) ─────────── */
 function pb_seo_editions(): array {
     return [
