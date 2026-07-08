@@ -2,13 +2,29 @@
 defined('ABSPATH') || exit;
 
 /**
- * AI Vartha Editorial — functions.php
+ * PaisaBot Editorial — functions.php
  * v3.1.3 — slug-safe category URLs, focus-visible, reduced-motion, print styles
  */
 
 /* ════════════════════════════════════════════════════════════════════════
    ONE-TIME SITE SETUP — runs on first page load, marks itself done
    ════════════════════════════════════════════════════════════════════════ */
+require get_template_directory() . '/inc/seo.php';
+
+/* One-time branding repair: the editions were titled "English"/"Hindi"/…
+   which poisoned every <title> and og:site_name. Brand = PaisaBot. */
+add_action('init', 'pb_branding_fix', 2);
+function pb_branding_fix(): void {
+    if (get_option('pb_branding_v1')) return;
+    if (in_array(get_option('blogname'), ['English', 'Hindi', 'Malayalam', 'Telugu'], true)) {
+        update_option('blogname', 'PaisaBot');
+    }
+    if (!get_option('blogdescription') || get_option('blogdescription') === 'Just another WordPress site') {
+        update_option('blogdescription', 'Economic Intelligence');
+    }
+    update_option('pb_branding_v1', '1');
+}
+
 add_action('init', 'aiv_auto_setup', 1);
 function aiv_auto_setup(): void {
     if (get_option('aiv_setup_v2')) return;
@@ -35,18 +51,18 @@ function aiv_auto_setup(): void {
 
     /* ── Pages ───────────────────────────────────────────────────── */
     $pages = [
-        ['slug'=>'about',           'en'=>'About AI Vartha',       'hi'=>'AI Vartha के बारे में',  'ml'=>'AI Vartha-യെ കുറിച്ച്', 'te'=>'AI Vartha గురించి',
-         'body'=>'<h2>India\'s Trusted Economic Intelligence Platform</h2><p>AI Vartha is a multilingual economic and financial news platform delivering trusted, accurate, and timely reporting in Hindi, Malayalam, and Telugu.</p>'],
+        ['slug'=>'about',           'en'=>'About PaisaBot',       'hi'=>'PaisaBot के बारे में',  'ml'=>'PaisaBot-യെ കുറിച്ച്', 'te'=>'PaisaBot గురించి',
+         'body'=>'<h2>India\'s Trusted Economic Intelligence Platform</h2><p>PaisaBot is a multilingual economic and financial news platform delivering trusted, accurate, and timely reporting in Hindi, Malayalam, and Telugu.</p>'],
         ['slug'=>'contact',         'en'=>'Contact',               'hi'=>'संपर्क करें',            'ml'=>'ബന്ധപ്പെടുക',           'te'=>'సంప్రదించండి',
          'body'=>'<h2>Get in Touch</h2><p>Editorial: <strong>editorial@paisabot.com</strong></p><p>Advertising: <strong>partnerships@paisabot.com</strong></p>'],
         ['slug'=>'privacy-policy',  'en'=>'Privacy Policy',        'hi'=>'गोपनीयता नीति',          'ml'=>'സ്വകാര്യതാ നയം',       'te'=>'గోప్యతా విధానం',
-         'body'=>'<h2>Privacy Policy</h2><p>AI Vartha collects minimal data and does not sell personal information. Contact editorial@paisabot.com to request data deletion.</p>'],
+         'body'=>'<h2>Privacy Policy</h2><p>PaisaBot collects minimal data and does not sell personal information. Contact editorial@paisabot.com to request data deletion.</p>'],
         ['slug'=>'disclaimer',      'en'=>'Disclaimer',            'hi'=>'अस्वीकरण',               'ml'=>'നിരാകരണം',             'te'=>'నిరాకరణ',
-         'body'=>'<h2>Disclaimer</h2><p>Content on AI Vartha is for informational purposes only and does not constitute financial advice. Always consult a qualified advisor before making investment decisions.</p>'],
+         'body'=>'<h2>Disclaimer</h2><p>Content on PaisaBot is for informational purposes only and does not constitute financial advice. Always consult a qualified advisor before making investment decisions.</p>'],
         ['slug'=>'editorial-policy','en'=>'Editorial Policy',      'hi'=>'संपादकीय नीति',          'ml'=>'എഡിറ്റോറിയൽ നയം',      'te'=>'సంపాదకీయ విధానం',
-         'body'=>'<h2>Editorial Policy</h2><p>AI Vartha\'s editorial coverage is fully independent of advertising. We verify all facts before publication and publish corrections transparently.</p>'],
+         'body'=>'<h2>Editorial Policy</h2><p>PaisaBot\'s editorial coverage is fully independent of advertising. We verify all facts before publication and publish corrections transparently.</p>'],
         ['slug'=>'subscribe',       'en'=>'Subscribe',             'hi'=>'सदस्यता लें',            'ml'=>'സബ്‌സ്‌ക്രൈബ് ചെയ്യൂ',  'te'=>'సభ్యత్వం పొందండి',
-         'body'=>'<h2>Subscribe to AI Vartha</h2><p>Get daily economic and financial news in your language. Email <strong>subscribe@paisabot.com</strong>.</p>'],
+         'body'=>'<h2>Subscribe to PaisaBot</h2><p>Get daily economic and financial news in your language. Email <strong>subscribe@paisabot.com</strong>.</p>'],
         ['slug'=>'stock-analysis',  'en'=>'Stock Analysis',        'hi'=>'स्टॉक विश्लेषण',         'ml'=>'സ്റ്റോക്ക് വിശകലനം',    'te'=>'స్టాక్ విశ్లేషణ',
          'body'=>'<h2>Stock Analysis</h2><p><a href="https://analyse.paisabot.com" target="_blank" rel="noopener">Open Stock Analyser →</a></p><p>Technical charts, MACD, RSI, StochRSI, support and resistance levels.</p>'],
         ['slug'=>'markets-pro',     'en'=>'Markets Pro',           'hi'=>'मार्केट्स प्रो',          'ml'=>'മാർക്കറ്റ്സ് പ്രോ',     'te'=>'మార్కెట్స్ ప్రో',
@@ -88,7 +104,7 @@ add_action('admin_notices', function () {
     if (!$pw || !current_user_can('manage_options')) return;
     echo '<div class="notice notice-success"><p>';
     printf(
-        '<strong>AI Vartha Setup:</strong> Application password generated for <code>admin</code>: <code>%s</code> &mdash; copy this to <code>.wp-credentials</code>.',
+        '<strong>PaisaBot Setup:</strong> Application password generated for <code>admin</code>: <code>%s</code> &mdash; copy this to <code>.wp-credentials</code>.',
         esc_html($pw)
     );
     echo '</p></div>';
@@ -569,7 +585,7 @@ add_action('admin_notices', function() {
     if (get_option('aivartha_setup_dismissed')) return;
     $url = admin_url('widgets.php');
     echo '<div class="notice notice-info is-dismissible">
-        <p><strong>AI Vartha Editorial v3</strong> is active. Configure your editorial sections:</p>
+        <p><strong>PaisaBot Editorial v3</strong> is active. Configure your editorial sections:</p>
         <ol style="margin-left:20px">
             <li>Create categories: <code>markets</code>, <code>policy</code>, <code>banking</code>, <code>economy</code>, <code>global</code>, <code>foreign-policy</code>, <code>technology</code>, <code>opinion</code>, <code>breaking</code></li>
             <li>Tag 5 articles with <code>briefing</code> to populate the homepage Briefing block</li>
