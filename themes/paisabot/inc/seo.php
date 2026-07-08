@@ -56,13 +56,19 @@ function pb_seo_editions(): array {
         'en' => 'https://www.paisabot.com',
         'hi' => 'https://hi.paisabot.com',
         'ml' => 'https://ml.paisabot.com',
-        'te' => 'https://tel.paisabot.com',
+        'te' => 'https://tel.paisabot.com',   // note: subdomain is "tel", lang code is "te"
+        'ta' => 'https://ta.paisabot.com',
+        'mr' => 'https://mr.paisabot.com',
+        'gu' => 'https://gu.paisabot.com',
+        'kn' => 'https://kn.paisabot.com',
+        'bn' => 'https://bn.paisabot.com',
+        'or' => 'https://or.paisabot.com',
     ];
 }
 
 function pb_seo_current_lang(): string {
     $lang = substr(get_locale(), 0, 2);
-    return in_array($lang, ['hi', 'ml', 'te'], true) ? $lang : 'en';
+    return array_key_exists($lang, pb_seo_editions()) ? $lang : 'en';
 }
 
 /* ── Description / canonical / URL helpers ─────────────────────────── */
@@ -137,7 +143,11 @@ function pb_seo_head(): void {
     }
 
     /* Open Graph + Twitter */
-    $og_locales = ['en' => 'en_US', 'hi' => 'hi_IN', 'ml' => 'ml_IN', 'te' => 'te_IN'];
+    $og_locales = [
+        'en' => 'en_US', 'hi' => 'hi_IN', 'ml' => 'ml_IN', 'te' => 'te_IN',
+        'ta' => 'ta_IN', 'mr' => 'mr_IN', 'gu' => 'gu_IN', 'kn' => 'kn_IN',
+        'bn' => 'bn_IN', 'or' => 'or_IN',
+    ];
     echo '<meta property="og:site_name" content="' . esc_attr(get_bloginfo('name')) . '">' . "\n";
     echo '<meta property="og:locale" content="' . esc_attr($og_locales[$lang] ?? 'en_US') . '">' . "\n";
     echo '<meta property="og:type" content="' . (is_singular('post') ? 'article' : 'website') . '">' . "\n";
